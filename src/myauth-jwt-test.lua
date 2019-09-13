@@ -18,7 +18,9 @@ function tb:test_should_authorize_token()
 end
 
 function tb:test_should_not_authorize_wrong_token()
-   	m.authorize_header("Authorization: Bearer blabla")
+   	if(pcall(m.authorize_header, "Authorization: Bearer blabla")) then
+   		error("Fail");
+   	end
 end
 
 

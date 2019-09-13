@@ -9,5 +9,5 @@ local _set_source_header = function()
 end
 
 function TestNginxStrategy:exit_unauthorized(msg)
-  
+  error("Set UNAUTHORIZED");
 end
