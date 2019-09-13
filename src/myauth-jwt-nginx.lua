@@ -1,18 +1,15 @@
 -- myauth-jwt-nginx.lua
 
-NgnxStrategy = {}
-NgnxStrategy.__index = NgnxStrategy
+require "class"
 
-function NgnxStrategy.new()
+NginxStrategy = class()
 
-end
-
-function NginxStrategy.set_source_header()
+local _set_source_header = function()
   ngx.req.set_header("X-ResponseSource", "myauth-proxy")
 end
 
-function NginxStrategyexit_unauthorized(msg)
-  set_source_header()
+function NginxStrategy:exit_unauthorized(msg)
+  _set_source_header()
   ngx.status = ngx.HTTP_UNAUTHORIZED
   ngx.say(msg)
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
