@@ -420,7 +420,7 @@ local function validate_exp_nbf(jwt_obj)
   local nbf = jwt_obj[str_const.payload][str_const.nbf]
 
   if (exp ~= nil or nbf ~= nil ) and not jwt_obj[str_const.reason] then
-    leeway = leeway or 0
+    local leeway = leeway or 0
     local now = ngx.now()
 
     if type(exp) == str_const.number and exp < (now - leeway) then
@@ -561,7 +561,7 @@ end
 
 function _M.verify(self, secret, jwt_str, leeway, encrypted)
 
-  jwt_obj = _M.load_jwt(self, secret, jwt_str)
+  local jwt_obj = _M.load_jwt(self, secret, jwt_str)
   if not jwt_obj.valid then
     return {verified=false, reason=jwt_obj[str_const.reason]}
   end
