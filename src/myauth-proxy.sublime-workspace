@@ -1,0 +1,465 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fun",
+				"function\tfunction"
+			],
+			[
+				"mya",
+				"myauth-jwt-test-nginx"
+			],
+			[
+				"myauth-j",
+				"myauth-jwt-nginx"
+			],
+			[
+				"test",
+				"test_token"
+			],
+			[
+				"au",
+				"auth_header"
+			],
+			[
+				"auth",
+				"authorize_header"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "myauth-jwt-test-nginx.lua",
+			"settings":
+			{
+				"buffer_size": 262,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "myauth-jwt-test.lua",
+			"settings":
+			{
+				"buffer_size": 1800,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "myauth-jwt-nginx.lua",
+			"settings":
+			{
+				"buffer_size": 438,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "myauth-jwt.lua",
+			"settings":
+			{
+				"buffer_size": 2442,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/resty"
+	],
+	"file_history":
+	[
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/test.lua",
+		"/Users/ozzy/Documents/tmp/hosts",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/myauth-jwt-test-nginx.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/myauth-jwt-test.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/myauth-jwt.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/resty/jwt.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/inspect.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/myauth-jwt-nginx.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/class.lua",
+		"/Users/ozzy/Documents/prog/my/myauth-proxy/src/resty/iresty_test.lua",
+		"/Users/ozzy/Library/Application Support/Sublime Text 3/Packages/User/Resty.sublime-build",
+		"/Users/ozzy/Documents/В суд.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/search-api/src/.gitignore",
+		"/Users/ozzy/Documents/prog/my/mylab-syslog/src/.gitignore",
+		"/Users/ozzy/Documents/prog/my/mylab-config/src.Config/.gitignore",
+		"/Users/ozzy/Documents/prog/my/dot-redis/src/.gitignore",
+		"/Users/ozzy/Documents/prog/my/mylab-web-interaction/src/MyLab.WebInteraction/MyLab.WebInteraction.csproj",
+		"/Users/ozzy/Documents/prog/my/mylab-config/LICENSE",
+		"/Users/ozzy/Documents/prog/my/mylab-redis-manager/LICENSE",
+		"/Users/ozzy/Documents/prog/my/myauth-oauth-point/LICENSE",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Описание выпусков/текущие изменения.txt",
+		"/Users/ozzy/Downloads/86b9c7d6aa4c4c00b59f6f9689aafa20/86b9c7d6-aa4c-4c00-b59f-6f9689aafa20.xml",
+		"/Users/ozzy/Downloads/389a16b7000342b3a32821785445a7b7/389a16b7-0003-42b3-a328-21785445a7b7.xml",
+		"/Users/ozzy/Downloads/4d2fec5781e74988a83462e34c8b2f8d/4d2fec57-81e7-4988-a834-62e34c8b2f8d.xml",
+		"/Users/ozzy/OneDrive/Работа/Если завис RDP.txt",
+		"/Users/ozzy/Downloads/www_infonot_ru (1)/Windows/www_infonot_ru.p7b",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/css-search-api/src/Ruzdi.Css.NotificationSearchApi/Ruzdi.Css.NotificationSearchApi.csproj",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/search-req-processor/src/Ruzdi.Search.ReqProcessor/Ruzdi.Search.ReqProcessor.csproj",
+		"/Users/ozzy/OneDrive/share/work/Вопросы по ДУЗ.txt",
+		"/Users/ozzy/Downloads/49-129114868/7475_resp.xml",
+		"/Users/ozzy/OneDrive/share/work/УЗ3 УИ3 УП3 - финал.txt",
+		"/Users/ozzy/OneDrive/share/work/Поиск ДУЗ/С ходу/readme.txt",
+		"/Users/ozzy/Downloads/api-v3.yml",
+		"/Users/ozzy/OneDrive/share/work/Пятничные тезисы.txt",
+		"/Users/ozzy/OneDrive/share/work/Кол-во часов по задачам от ЛИ 2018.txt",
+		"/Users/ozzy/Documents/tmp/infonot-msg/api-м1юньд",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Компоненты РУЗДИ.csv",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/client/task-server/config/ruzdi-pkg-reanimator-task.json",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/client/pub-search-server/config/ruzdi-extract-api.json",
+		"/Users/ozzy/OneDrive/share/work/Reset пакетов от 120719.sql",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-obrab/docker-compose.yml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Очереди.txt",
+		"/Users/ozzy/Downloads/robots.txt",
+		"/Users/ozzy/OneDrive/Работа/pass.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/test/task-server/start.sh",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/download-ruzdi.sh",
+		"/private/etc/hosts",
+		"/Users/ozzy/Downloads/disable_async_process.sql",
+		"/Users/ozzy/Documents/prog/fciit/spnd/stuff/doc/ТЗ.md",
+		"/Users/ozzy/OneDrive/share/work/Пятничные тезисы",
+		"/Users/ozzy/Downloads/Ошибка_валидации_XML.txt",
+		"/Users/ozzy/OneDrive/Работа/vpn/triasoft-fciit-vpn.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Ключи Redis.txt",
+		"/Users/ozzy/OneDrive/share/work/Отстойник-080719.txt",
+		"/Users/ozzy/Downloads/request_kartoteka.txt",
+		"/Users/ozzy/Downloads/response_kartoteka.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-port/docker-compose.yml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-bank/docker-compose.yml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-file/config/fs-storage-api.json",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-uinot/config/ruzdi-css-reg-api.json",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-obrab/config/ruzdi-not-reg-msg-listener.json",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/client/crypto-server/docker-compose.yml",
+		"/Users/ozzy/OneDrive/share/work/Reset пакетов от 030719.sql",
+		"/Users/ozzy/OneDrive/share/work/Reset пакетов от 280619.sql",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/notification-reg-api/src/.gitignore",
+		"/Users/ozzy/OneDrive/Работа/vpn/settings.txt",
+		"/Users/ozzy/Documents/prog/fciit/rr/spv/doc/tectus/Справочники/dDeals.xsd",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Используемые пакеты.csv",
+		"/Users/ozzy/Downloads/Запрос_2019-005-271099_.xml",
+		"/Users/ozzy/Downloads/Запрос.xml",
+		"/Users/ozzy/Downloads/Выписка.xml",
+		"/Users/ozzy/Downloads/2019-005-271233.xml",
+		"/Users/ozzy/Documents/prog/fciit/rr/spd/doc/Строки подключения.txt",
+		"/Users/ozzy/OneDrive/share/work/Пакеты по залогам с проблемами в акт состоянии.txt",
+		"/Users/ozzy/Downloads/Разбор отстойника (2).txt",
+		"/Users/ozzy/Downloads/Разбор отстойника (1).txt",
+		"/Users/ozzy/Downloads/Разбор отстойника.txt",
+		"/Users/ozzy/Documents/prog/fciit/rr/spd/doc/Виды обращений.md",
+		"/Users/ozzy/OneDrive/Работа/Почты.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-uinot/docker-compose.yml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-file/docker-compose.yml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-pdf/docker-compose.yml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Контуры/Прод/Сервера.txt",
+		"/Users/ozzy/Library/Mobile Documents/F3LWYJ7GM7~com~apple~mobilegarageband/Documents/.Моя песня.band.icloud",
+		"/Users/ozzy/OneDrive/share/work/Фэйл регистрации застрявшего пакета.sql",
+		"/Users/ozzy/Documents/prog/fciit/rr/spv/doc/tectus/schema.json",
+		"/Users/ozzy/OneDrive/share/work/incontrol-to-fault-237.sql",
+		"/Users/ozzy/OneDrive/Работа/Серты/instrall for linux.txt",
+		"/Users/ozzy/OneDrive/Работа/vpn/tune-fciit-vpm.sh",
+		"/Users/ozzy/Downloads/2019.06.csv",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-proxy/include/backend_internal.iconf",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-proxy/include/upstream.iconf",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/test/nginx/include/backend_internal.iconf",
+		"/Volumes/ru.cryptopro.csp-4.0.9963/ReadMe.txt",
+		"/Users/ozzy/Documents/prog/fciit/zpp/deploy/db/update_prom.sql",
+		"/Users/ozzy/Documents/prog/fciit/zpp/deploy/db/update_test.sql",
+		"/Users/ozzy/Documents/prog/fciit/zpp/docs/Тестовое окружение.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-proxy/conf.d/default.conf_work",
+		"/Users/ozzy/OneDrive/share/work/Обновдение ФХ - атрибуты файлов.sql",
+		"/Users/ozzy/OneDrive/share/work/Проблема с пакетами/Спасение рядового 73cb430390ad4f8cbeaaf1a9b7b42dd9.sql",
+		"/Users/ozzy/OneDrive/share/work/Разбор отстойников/0405/Остальное.txt",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Состовляющие кодов маршрутизации PDF генерации.csv",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Состовляющие кодов маршрутизации PDF генерации.cым",
+		"/Users/ozzy/OneDrive/share/work/Разбор отстойников/0405/Залог уже исключён.txt",
+		"/Users/ozzy/Documents/tmp/pkg-fix.sql",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-port/config/ruzdi-search-api.json",
+		"/Users/ozzy/Downloads/RrLogin.Api/parameters.xml",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-bank/config/ruzdi-inp-pkg-api.json",
+		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-bank/config/ruzdi-inp-pkg-api-proxy.php",
+		"/Users/ozzy/Documents/prog/fciit/smev-gate/.gitignore"
+	],
+	"find":
+	{
+		"height": 40.0
+	},
+	"find_in_files":
+	{
+		"height": 102.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"] ",
+			"payload",
+			"[",
+			"leeway",
+			")\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "myauth-jwt-test-nginx.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 262,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								262,
+								262
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "myauth-jwt-test.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1800,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1732,
+								1732
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "myauth-jwt-nginx.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 438,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								438,
+								438
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "myauth-jwt.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2442,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2001,
+								2001
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 262.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 37.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 230.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/Resty.sublime-build",
+	"project": "myauth-proxy.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 312.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
