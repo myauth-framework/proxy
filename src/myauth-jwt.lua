@@ -32,12 +32,16 @@ local function check_and_provide_token_from_header(auth_header, host_header)
   end
 
   local _, _, host = string.find(host_header, "Host:%s+(.+)")
-  if host ~= nil then
-    if jwt_obj.payload.aud == null then
-      error('TODO!!!')
-    end 
-  end
-
+  if jwt_obj.payload.aud ~= null then
+    if host ~= nil then
+      if(jwt_obj.payload.aud ~= host) then
+          _M.strategy:exit_unauthorized("Invalid audience. Expected '" .. jwt_obj.payload.aud .. "' but got '" .. host .. "'")
+      end
+    else
+      _M.strategy:exit_unauthorized("Cant detect a host to check audience")
+    end
+  end 
+  
   return jwt_obj
 end
 

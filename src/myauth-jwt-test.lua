@@ -7,7 +7,7 @@ local tb = iresty_test.new({unit_name="myauth-jwt-test"})
 require "myauth-jwt-test-nginx"
 local m = require "myauth-jwt"
 local auth_header = "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDbGltZSI6IkNsaW1lVmFsIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJzdWIiOiIyYmJkZGZjNmE2Njg0OTJlYmFjNTU1YTI4ZTczODFlMSIsIm5iZiI6MTU3MjQ1MTcxOCwiZXhwIjoxNTc4NDUxNzE4LCJpc3MiOiJNeUF1dGguT0F1dGhQb2ludCIsImF1ZCI6InRlc3QuaG9zdC5ydSJ9.SMRYoIcN6iDxTpOV3IP2RZ_BB5xeVTy1DU1vnuu0A-M"
-local host_header = "Host: test-host.com"
+local host_header = "Host: test.host.ru"
 
 m.strategy = require "myauth-jwt-test-nginx"
 m.secret = "qwertyqwertyqwerty"
