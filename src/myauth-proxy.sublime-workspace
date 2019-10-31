@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"jw",
+				"jwt_obj"
+			],
+			[
+				"jwt",
+				"jwt_obj"
+			],
+			[
 				"fun",
 				"function\tfunction"
 			],
@@ -31,6 +39,23 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "myauth-jwt.lua",
+			"settings":
+			{
+				"buffer_size": 2831,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "myauth-jwt-test.lua",
+			"settings":
+			{
+				"buffer_size": 1632,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -69,10 +94,15 @@
 	"expanded_folders":
 	[
 		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src",
-		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/resty"
+		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/resty",
+		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/test"
 	],
 	"file_history":
 	[
+		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-test-nginx.lua",
+		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-nginx.lua",
+		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-test.lua",
+		"/C/Users/ozzy/OneDrive/prog/my/mylab-web-identity/src/MyLab.WebIdentity.Tests/JwtIdentityBehavior.cs",
 		"/C/Users/ozzy/AppData/Local/Temp/eM Client temporary files/1yo31sho/Часть.txt",
 		"/C/Tmp/export/2019-10-31_11-05-203_fciit_eis_rr_bug-tracker_export/project.json",
 		"/C/Users/ozzy/OneDrive/Работа/Если завис RDP.txt",
@@ -122,9 +152,6 @@
 		"/C/Users/ozzy/OneDrive/prog/fciit/rr/spd/doc/Примеры СПД/егрн_приостановление.json",
 		"/C/Users/ozzy/OneDrive/prog/fciit/rr/spd/doc/Примеры СПД/выписка_дду.json",
 		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt.lua",
-		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-nginx.lua",
-		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-test.lua",
-		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-test-nginx.lua",
 		"/C/Users/ozzy/OneDrive/prog/fciit/rr/spd/doc/Поддерживаемые дейстыия.txt",
 		"/C/Users/ozzy/AppData/Roaming/Sublime Text 3/Packages/User/Resty.sublime-build",
 		"/C/Program Files/Openresty/README.txt",
@@ -199,12 +226,11 @@
 		"/Users/ozzy/Documents/prog/fciit/rr/spv/doc/tectus/Справочники/dDeals.xsd",
 		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Используемые пакеты.csv",
 		"/Users/ozzy/Downloads/Запрос_2019-005-271099_.xml",
-		"/Users/ozzy/Downloads/Запрос.xml",
-		"/Users/ozzy/Downloads/Выписка.xml"
+		"/Users/ozzy/Downloads/Запрос.xml"
 	],
 	"find":
 	{
-		"height": 40.0
+		"height": 27.0
 	},
 	"find_in_files":
 	{
@@ -218,6 +244,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"claims",
+			"(\"=====\")",
 			"export",
 			"protocol",
 			"] ",
@@ -242,8 +270,69 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "myauth-jwt.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2831,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1313,
+								1313
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 936.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "myauth-jwt-test.lua",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1632,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1057,
+								1057
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -328,7 +417,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 213.0,
+	"side_bar_width": 245.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

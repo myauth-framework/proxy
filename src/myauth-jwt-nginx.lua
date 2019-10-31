@@ -7,6 +7,14 @@ local _set_source_header = function()
   ngx.req.set_header("X-ResponseSource", "myauth-proxy")
 end
 
+function _M.set_user_id(userId)
+	ngx.req.set_header("X-User-Id", userId)
+end
+
+function _M.set_user_claims(claims)
+	ngx.req.set_header("X-User-Claims", claims)
+end
+
 function _M.exit_unauthorized(msg)
   _set_source_header()
   ngx.status = ngx.HTTP_UNAUTHORIZED

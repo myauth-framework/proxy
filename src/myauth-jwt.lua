@@ -60,12 +60,13 @@ function _M.authorize()
   local auth_header = ngx.var.http_Authorization
   local host_header = ngx.var.http_Host
   authorize_header(auth_header, host_header)
-  
 end
 
 -- Check JWT token from specified header without roles and climes
 function _M.authorize_header(auth_header, host_header)
-  check_and_provide_token_from_header(auth_header, host_header)
+  local jwt_obj = check_and_provide_token_from_header(auth_header, host_header)
+  
+  _M.strategy.set_user_id(jwt_obj.payload.sub)
 end
 
 -- Check JWT token from current 'Authorization' header with specified roles
@@ -90,8 +91,10 @@ function _M.authorize_header_for_roles(auth_header, host_header, ...)
 
     local target_roles = table.pack(...)
     if has_value(target_roles, role) then
-        return true
-      end  
+      _M.strategy.set_user_id(jwt_obj.payload.sub)
+      _M.strategy.set_user_claims(cjson.encode(jwt_obj.payload))
+      return true
+    end  
 
     _M.strategy:exit_forbidden("Access denied")
 end
