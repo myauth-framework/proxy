@@ -1,4 +1,6 @@
 -- myauth-jwt-test-nginx.lua
+-- nginx wrapper for tests
+
 local _M = {}
 
 local _set_source_header = function()
