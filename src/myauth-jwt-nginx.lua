@@ -1,10 +1,13 @@
 -- myauth-jwt-nginx.lua
 -- nginx wrapper
 
+local cjson = require "cjson"
+
 local _M = {}
 
-local _set_source_header = function()
-  ngx.req.set_header("X-ResponseSource", "myauth-proxy")
+local function set_source_header()
+  --ngx.req.set_header("X-Response-Source", "myauth-proxy")
+  ngx.header["X-Response-Source"] = "myauth-proxy"
 end
 
 function _M.set_user_id(userId)
@@ -16,16 +19,16 @@ function _M.set_user_claims(claims)
 end
 
 function _M.exit_unauthorized(msg)
-  _set_source_header()
+  set_source_header()
   ngx.status = ngx.HTTP_UNAUTHORIZED
-  ngx.say(msg)
+  ngx.print(msg)
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 function _M.exit_forbidden(msg)
-  _set_source_header()
+  set_source_header()
   ngx.status = ngx.HTTP_FORBIDDEN
-  ngx.say(msg)
+  ngx.print(msg)
   ngx.exit(ngx.HTTP_FORBIDDEN)
 end
 
