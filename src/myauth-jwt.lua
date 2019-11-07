@@ -57,11 +57,30 @@ local function has_value (tab, val)
     return false
 end
 
+local function set_user_headers(jwt_payload)
+  _M.strategy.set_user_id(jwt_payload.sub)
+
+  local claims = {}
+  for k,v in pairs(jwt_payload) do
+    if k ~= "iss" and 
+       k ~= "sub" and 
+       k ~= "aud" and 
+       k ~= "exp" and 
+       k ~= "nbf" and 
+       k ~= "iat" and 
+       k ~= "jti" then
+      claims[k] = v
+    end
+  end
+
+  _M.strategy.set_user_claims(cjson.encode(claims))
+end
+
 -- Check JWT token from specified header without roles and climes
 function _M.authorize_header(auth_header, host_header)
   local jwt_obj = check_and_provide_token_from_header(auth_header, host_header)
   
-  _M.strategy.set_user_id(jwt_obj.payload.sub)
+  set_user_headers(jwt_obj.payload)
 end
 
 -- Check JWT token from current 'Authorization' header without roles and climes
@@ -85,8 +104,7 @@ function _M.authorize_header_for_roles(auth_header, host_header, ...)
 
     local target_roles = table.pack(...)
     if has_value(target_roles, role) then
-      _M.strategy.set_user_id(jwt_obj.payload.sub)
-      _M.strategy.set_user_claims(cjson.encode(jwt_obj.payload))
+      set_user_headers(jwt_obj.payload)
       return true
     end  
 
