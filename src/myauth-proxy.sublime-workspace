@@ -39,6 +39,15 @@
 	},
 	"buffers":
 	[
+		{
+			"contents": "+79035035254",
+			"settings":
+			{
+				"buffer_size": 12,
+				"line_ending": "Windows",
+				"name": "+79035035254"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -82,6 +91,21 @@
 	],
 	"file_history":
 	[
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/robonot-desctop/src/Ruzdi.Robonot.Core/bin/Debug/9420005",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/robonot-desctop/src/Ruzdi.Robonot.Core/bin/Debug/config.json",
+		"/C/Tmp/точечное обновление рузди/prom/prom-uinont2.yml",
+		"/C/Tmp/точечное обновление рузди/test/test-uinot.yml",
+		"/C/Users/ozzy/Downloads/6afb27f01d274abfb2c7eb99e2246c5b.xml",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/css-search-api/src/Ruzdi.Css.NotificationSearchApi/Ruzdi.Css.NotificationSearchApi.csproj",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/docs/Контуры/Тест/Тестовое окружение.txt",
+		"/C/Tmp/точечное обновление рузди/prom/prom-uinont.yml",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-uinot/docker-compose.yml",
+		"/C/Tmp/точечное обновление рузди/prom/prom-obrab.yml",
+		"/C/Users/ozzy/OneDrive/Работа/Если завис RDP.txt",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/stuff/app-deploy/test/task-server/docker-compose.yml",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-obrab/docker-compose.yml",
+		"/C/Users/ozzy/OneDrive/prog/fciit/ruzdi/stuff/app-deploy/test/client-ui-server/docker-compose.yml",
+		"/C/Tmp/точечное обновление рузди/test/test-щикфиюньд.yaml",
 		"/C/Users/ozzy/OneDrive/share/docker-projects/myauth/nginx-config.conf",
 		"/C/Users/ozzy/OneDrive/Работа/pass.txt",
 		"/C/Users/ozzy/OneDrive/prog/my/myauth-proxy/src/myauth-jwt-nginx.lua",
@@ -103,7 +127,6 @@
 		"/C/Users/ozzy/OneDrive/prog/my/mylab-web-identity/src/MyLab.WebIdentity.Tests/JwtIdentityBehavior.cs",
 		"/C/Users/ozzy/AppData/Local/Temp/eM Client temporary files/1yo31sho/Часть.txt",
 		"/C/Tmp/export/2019-10-31_11-05-203_fciit_eis_rr_bug-tracker_export/project.json",
-		"/C/Users/ozzy/OneDrive/Работа/Если завис RDP.txt",
 		"/C/Tmp/export/spnd/2019-10-30_08-20-432_fciit_eis_doc-confirm_rnd-doc-_export/project.json",
 		"/C/Tmp/export/spnd/protocol-writer/project.json",
 		"/C/Tmp/export/spnd/protocol-writer/project.bundle",
@@ -195,25 +218,11 @@
 		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-obrab/docker-compose.yml",
 		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Очереди.txt",
 		"/Users/ozzy/Downloads/robots.txt",
-		"/Users/ozzy/OneDrive/Работа/pass.txt",
-		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/test/task-server/start.sh",
-		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/download-ruzdi.sh",
-		"/private/etc/hosts",
-		"/Users/ozzy/Downloads/disable_async_process.sql",
-		"/Users/ozzy/Documents/prog/fciit/spnd/stuff/doc/ТЗ.md",
-		"/Users/ozzy/OneDrive/share/work/Пятничные тезисы",
-		"/Users/ozzy/Downloads/Ошибка_валидации_XML.txt",
-		"/Users/ozzy/OneDrive/Работа/vpn/triasoft-fciit-vpn.txt",
-		"/Users/ozzy/Documents/prog/fciit/ruzdi/docs/Ключи Redis.txt",
-		"/Users/ozzy/OneDrive/share/work/Отстойник-080719.txt",
-		"/Users/ozzy/Downloads/request_kartoteka.txt",
-		"/Users/ozzy/Downloads/response_kartoteka.txt",
-		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-port/docker-compose.yml",
-		"/Users/ozzy/Documents/prog/fciit/ruzdi/stuff/app-deploy/prom/dlg-ruzdi-back-bank/docker-compose.yml"
+		"/Users/ozzy/OneDrive/Работа/pass.txt"
 	],
 	"find":
 	{
-		"height": 27.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -227,6 +236,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"DataSearchService",
 			"nil",
 			"claims",
 			"(\"=====\")",
@@ -254,8 +264,37 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12,
+								12
+							]
+						],
+						"settings":
+						{
+							"auto_name": "+79035035254",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],

@@ -1,4 +1,4 @@
--- myauth-jwt-nginx.lua
+-- myauth-nginx.lua
 -- nginx wrapper
 
 local cjson = require "cjson"
