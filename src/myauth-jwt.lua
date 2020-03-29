@@ -3,7 +3,7 @@
 
 local _M = {}
 
-local cjson = require "cjson"
+local cjson = require "libs.json"
 
 _M.strategy = require "myauth-nginx"
 _M.secret = nil
@@ -75,20 +75,20 @@ local function set_user_headers(jwt_payload)
   _M.strategy.set_user_claims(cjson.encode(claims))
 end
 
--- Check JWT token from specified header without roles and climes
-function _M.authorize_header(auth_header, host_header)
-  local jwt_obj = check_and_provide_token_from_header(auth_header, host_header)
+---- Check JWT token from specified header without roles and climes
+--function _M.authorize_header(auth_header, host_header)
+--  local jwt_obj = check_and_provide_token_from_header(auth_header, host_header)
   
-  set_user_headers(jwt_obj.payload)
-end
+--  set_user_headers(jwt_obj.payload)
+--end
 
--- Check JWT token from current 'Authorization' header without roles and climes
-function _M.authorize()
+---- Check JWT token from current 'Authorization' header without roles and climes
+--function _M.authorize()
   
-  local auth_header = ngx.var.http_Authorization
-  local host_header = ngx.var.http_Host
-  _M.authorize_header(auth_header, host_header)
-end
+--  local auth_header = ngx.var.http_Authorization
+--  local host_header = ngx.var.http_Host
+--  _M.authorize_header(auth_header, host_header)
+--end
 
 -- Check JWT token from current 'Authorization' header with specified roles
 function _M.authorize_header_for_roles(auth_header, host_header, ...)

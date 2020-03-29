@@ -1,12 +1,9 @@
 -- myauth-nginx.lua
 -- nginx wrapper
 
-local cjson = require "cjson"
-
 local _M = {}
 
 local function set_source_header()
-  --ngx.req.set_header("X-Response-Source", "myauth-proxy")
   ngx.header["X-Response-Source"] = "myauth-proxy"
 end
 
