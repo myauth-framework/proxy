@@ -1,4 +1,4 @@
--- test-nginx.lua
+-- myauth-jwt-test-nginx.lua
 -- nginx wrapper for tests
 
 local _M = {}
