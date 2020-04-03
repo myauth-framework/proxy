@@ -29,4 +29,11 @@ function _M.exit_forbidden(msg)
   ngx.exit(ngx.HTTP_FORBIDDEN)
 end
 
+function _M.exit_internal_error(code)
+  set_source_header()
+  ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR 
+  ngx.print("error_code: " .. code)
+  ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR )
+end
+
 return _M

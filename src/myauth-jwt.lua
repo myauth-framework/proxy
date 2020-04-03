@@ -9,12 +9,7 @@ _M.strategy = require "myauth-nginx"
 _M.secret = nil
 _M.ignore_audience = false
 
-local function check_and_provide_token_from_header(auth_header, host_header)
-  if auth_header == nil then
-    _M.strategy.exit_unauthorized("Missing token header")
-  end
-
-  local _, _, token = string.find(auth_header, "Bearer%s+(.+)")
+local function check_and_provide_token_from_header(token, host)
   if token == nil then
     _M.strategy.exit_unauthorized("Missing token")
   end
@@ -32,7 +27,6 @@ local function check_and_provide_token_from_header(auth_header, host_header)
   end
 
   if not _M.ignore_audience then
-    local _, _, host = string.find(host_header, "Host:%s+(.+)")
     if jwt_obj.payload.aud ~= null then
       if host ~= nil then
         if(jwt_obj.payload.aud ~= host) then
@@ -75,25 +69,10 @@ local function set_user_headers(jwt_payload)
   _M.strategy.set_user_claims(cjson.encode(claims))
 end
 
----- Check JWT token from specified header without roles and climes
---function _M.authorize_header(auth_header, host_header)
---  local jwt_obj = check_and_provide_token_from_header(auth_header, host_header)
-  
---  set_user_headers(jwt_obj.payload)
---end
-
----- Check JWT token from current 'Authorization' header without roles and climes
---function _M.authorize()
-  
---  local auth_header = ngx.var.http_Authorization
---  local host_header = ngx.var.http_Host
---  _M.authorize_header(auth_header, host_header)
---end
-
 -- Check JWT token from current 'Authorization' header with specified roles
-function _M.authorize_header_for_roles(auth_header, host_header, ...)
+function _M.authorize_header_for_roles(token, host, ...)
 
-    local jwt_obj = check_and_provide_token_from_header(auth_header, host_header)
+    local jwt_obj = check_and_provide_token_from_header(token, host)
 
     local role = jwt_obj.payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
 
@@ -108,16 +87,6 @@ function _M.authorize_header_for_roles(auth_header, host_header, ...)
     end  
 
     _M.strategy.exit_forbidden("Access denied for your role")
-end
-
--- Check JWT token from current 'Authorization' header with specified roles
-function _M.authorize_for_roles(...)
-
-  local roles = {...}
-  local auth_header = ngx.var.http_Authorization
-  local host_header = ngx.var.http_Host
-  _M.authorize_header_for_roles(auth_header, host_header, unpack(roles))
-
 end
 
 return _M

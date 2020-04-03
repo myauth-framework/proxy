@@ -15,12 +15,16 @@ function _M.set_user_claims(claims)
 	print("Set X-User-Claims header: " .. claims)
 end
 
-function _M.exit_unauthorized(self, msg)
+function _M.exit_unauthorized(msg)
   error("Set UNAUTHORIZED: " .. msg);
 end
 
-function _M.exit_forbidden(self, msg)
+function _M.exit_forbidden(msg)
   error("Set FORBIDDEN: " .. msg);
+end
+
+function _M.exit_internal_error(code)
+  error("Set HTTP_INTERNAL_SERVER_ERROR: " .. code);
 end
 
 return _M;
