@@ -35,13 +35,13 @@ function tb:test_should_load_basic()
       error("Basic auth settings not found")
    end
 
-   -- print("Basic object: " .. cjson.encode(m.basic))
+   --print("Basic object: " .. cjson.encode(m.basic))
 
    local first = m.basic[1]
    if(first == nil) then
       error("Basic items not found")
    end
-   if(first.url ~= "/basic-access-[\\d]+") then
+   if(first.url ~= "/basic%-access%-[%d]+") then
       error("Basic item's URL not loaded")
    end
    if(first.users == nil or first.users[1] == nil) then
@@ -72,7 +72,7 @@ function tb:test_should_load_rbac()
    if(first == nil) then
       error("RBAC rules not found")
    end
-   if(first.url ~= "/rbac-access-[\\d]+") then
+   if(first.url ~= "/rbac%-access%-[%d]+") then
       error("RBAC rule's URL not loaded")
    end
    if(first.roles == nil or first.roles[1] == nil) then
