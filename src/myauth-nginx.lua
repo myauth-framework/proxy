@@ -18,6 +18,7 @@ end
 function _M.exit_unauthorized(msg)
   set_source_header()
   ngx.status = ngx.HTTP_UNAUTHORIZED
+  ngx.req.set_header("Content-Type", "text/plain") 
   ngx.print(msg)
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
@@ -25,13 +26,15 @@ end
 function _M.exit_forbidden(msg)
   set_source_header()
   ngx.status = ngx.HTTP_FORBIDDEN
+  ngx.req.set_header("Content-Type", "text/plain") 
   ngx.print(msg)
   ngx.exit(ngx.HTTP_FORBIDDEN)
 end
 
 function _M.exit_internal_error(code)
   set_source_header()
-  ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR 
+  ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
+  ngx.req.set_header("Content-Type", "text/plain") 
   ngx.print("error_code: " .. code)
   ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR )
 end

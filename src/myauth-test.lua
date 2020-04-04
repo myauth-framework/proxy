@@ -38,11 +38,11 @@ function tb:init(  )
 end
 
 function tb:test_should_pass_anon()
-   m.authorize("/foo")
+   m.authorize_core("/foo")
 end
 
 function tb:test_should_fail_anon_if_url_not_defined()
-  local v, err = pcall(m.authorize, "/bar")
+  local v, err = pcall(m.authorize_core, "/bar")
   if v then
       error("No expected error")
    else
@@ -51,11 +51,11 @@ function tb:test_should_fail_anon_if_url_not_defined()
 end
 
 function tb:test_should_pass_basic()
-   m.authorize("/basic-access-1", user1_basic_header)
+   m.authorize_core("/basic-access-1", user1_basic_header)
 end
 
 function tb:test_should_fail_basic_if_url_not_defined()
-  local v, err = pcall(m.authorize, "/bar", user1_basic_header)
+  local v, err = pcall(m.authorize_core, "/bar", user1_basic_header)
   if v then
       error("No expected error")
    else
@@ -64,7 +64,7 @@ function tb:test_should_fail_basic_if_url_not_defined()
 end
 
 function tb:test_should_fail_basic_if_wrong_user_defined()
-  local v, err = pcall(m.authorize, "/basic-access-1", user2_basic_header)
+  local v, err = pcall(m.authorize_core, "/basic-access-1", user2_basic_header)
   if v then
       error("No expected error")
    else
@@ -73,11 +73,11 @@ function tb:test_should_fail_basic_if_wrong_user_defined()
 end
 
 function tb:test_should_pass_rbac()
-   m.authorize("/basic-access-1", admin_rbac_header, host)
+   m.authorize_core("/basic-access-1", admin_rbac_header, host)
 end
 
 function tb:test_should_fail_rbac_if_url_not_defined()
-  local v, err = pcall(m.authorize, "/bar", admin_rbac_header, host);
+  local v, err = pcall(m.authorize_core, "/bar", admin_rbac_header, host);
   if v then
       error("No expected error")
    else
@@ -86,7 +86,7 @@ function tb:test_should_fail_rbac_if_url_not_defined()
 end
 
 function tb:test_should_fail_rbac_if_role_absent()
-  local v, err = pcall(m.authorize, "/basic-access-1", notadmin_rbac_header, host);
+  local v, err = pcall(m.authorize_core, "/basic-access-1", notadmin_rbac_header, host);
   if v then
       error("No expected error")
    else
@@ -95,7 +95,7 @@ function tb:test_should_fail_rbac_if_role_absent()
 end
 
 function tb:test_should_fail_rbac_if_wrong_host()
-  local v, err = pcall(m.authorize, "/basic-access-1", admin_rbac_header, wrong_host);
+  local v, err = pcall(m.authorize_core, "/basic-access-1", admin_rbac_header, wrong_host);
   if v then
       error("No expected error")
    else
@@ -104,7 +104,7 @@ function tb:test_should_fail_rbac_if_wrong_host()
 end
 
 function tb:test_should_fail_rbac_if_wrong_sign()
-  local v, err = pcall(m.authorize, "/basic-access-1", admin_rbac_header_wrong_sign, host);
+  local v, err = pcall(m.authorize_core, "/basic-access-1", admin_rbac_header_wrong_sign, host);
   if v then
       error("No expected error")
    else

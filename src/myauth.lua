@@ -86,10 +86,10 @@ function _M.authorize()
 	local host_header = ngx.var.http_Host
   local url = ngx.var.request_uri
   
-  authorize(url, auth_header, host_header)
+  _M.authorize_core(url, auth_header, host_header)
 end
 
-function _M.authorize(url, auth_header, host_header)
+function _M.authorize_core(url, auth_header, host_header)
 
   if(_M.config == nil) then
     error("MyAuth config was not loaded")
