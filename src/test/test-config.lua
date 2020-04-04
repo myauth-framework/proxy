@@ -14,13 +14,16 @@ basic = {
 }
 
 rbac = {
-	{
-		url = "/rbac-access-[\\d]+",
-		roles = { "role-1", "role-2" } 
-	},
-	{
-		url = "/rbac-access-2",
-		roles = { "role-3", "role-4" } 
+	secret = "qwerty",
+	rules = {
+		{
+			url = "/rbac-access-[\\d]+",
+			roles = { "role-1", "role-2" } 
+		},
+		{
+			url = "/rbac-access-2",
+			roles = { "role-3", "role-4" } 
+		}
 	}
 }
 

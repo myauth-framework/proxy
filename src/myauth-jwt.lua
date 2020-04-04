@@ -70,7 +70,7 @@ local function set_user_headers(jwt_payload)
 end
 
 -- Check JWT token from current 'Authorization' header with specified roles
-function _M.authorize_header_for_roles(token, host, ...)
+function _M.authorize_roles(token, host, target_roles)
 
     local jwt_obj = check_and_provide_token_from_header(token, host)
 
@@ -80,7 +80,6 @@ function _M.authorize_header_for_roles(token, host, ...)
       _M.strategy.exit_forbidden("Roles not specified")
     end
 
-    local target_roles = table.pack(...)
     if has_value(target_roles, role) then
       set_user_headers(jwt_obj.payload)
       return true

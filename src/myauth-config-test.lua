@@ -57,20 +57,29 @@ function tb:test_should_load_rbac()
       error("RBAC settings not found")
    end
 
+   if(m.rbac.rules == nil) then
+      error("RBAC rules settings not loaded")
+   end
+
+   if(m.rbac.secret ~= "qwerty") then
+      error("Wrong RBAC secret")
+   end
+
    -- print("Rbac object: " .. cjson.encode(m.rbac))
 
-   local first = m.rbac[1]
+   local first = m.rbac.rules[1]
+
    if(first == nil) then
-      error("RBAC items not found")
+      error("RBAC rules not found")
    end
    if(first.url ~= "/rbac-access-[\\d]+") then
-      error("RBAC item's URL not loaded")
+      error("RBAC rule's URL not loaded")
    end
    if(first.roles == nil or first.roles[1] == nil) then
-      error("RBAC item's roles not loaded")
+      error("RBAC rule's roles not loaded")
    end
    if(first.roles[1] ~= "role-1" or first.roles[2] ~= "role-2") then
-      error("RBAC item's roles loaded incorrectly")
+      error("RBAC rule's roles loaded incorrectly")
    end
 end
 

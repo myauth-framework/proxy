@@ -9,8 +9,8 @@ local admin_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 local admin_rbac_header_wrong_sign = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUF1dGguT0F1dGhQb2ludCIsInN1YiI6IjBjZWMwNjdmOGRhYzRkMTg5NTUxMjAyNDA2ZTQxNDdjIiwiZXhwIjo3NTY4NDcyMDI0LjAyNjUwMiwiYXVkIjoidGVzdC5ob3N0LnJ1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJteWF1dGg6Y2xpbWUiOiJDbGltZVZhbCJ9.YWXLyH2sn7d_0SQyD0ZAtsK_67reGJU5UnyEuAmaVb"
 local notadmin_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUF1dGguT0F1dGhQb2ludCIsInN1YiI6IjBjZWMwNjdmOGRhYzRkMTg5NTUxMjAyNDA2ZTQxNDdjIiwiZXhwIjo3NTY4NDcyMDI0LjAyNjUwMiwiYXVkIjoidGVzdC5ob3N0LnJ1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsIm15YXV0aDpjbGltZSI6IkNsaW1lVmFsIn0.RRbNYQXXeEpTzgyQgiJlNBHlmpsUFk7-V1mp3mGq978"
 
-local host_header = "Host: test.host.ru"
-local wrong_host_header = "Host: test.wrong-host.ru"
+local host = "test.host.ru"
+local wrong_host = "test.wrong-host.ru"
 
 local m = nil;
 
@@ -26,9 +26,12 @@ function tb:init(  )
       }
     },
     rbac = {
-      {
-        url = "%/basic%-access%-[%d]+",
-        roles = { "Admin" } 
+      secret = "qwerty",
+      rules = {
+        {
+          url = "%/basic%-access%-[%d]+",
+          roles = { "Admin" } 
+        }
       }
     }
    }
@@ -70,11 +73,11 @@ function tb:test_should_fail_basic_if_wrong_user_defined()
 end
 
 function tb:test_should_pass_rbac()
-   m.authorize("/basic-access-1", admin_rbac_header, host_header)
+   m.authorize("/basic-access-1", admin_rbac_header, host)
 end
 
 function tb:test_should_fail_rbac_if_url_not_defined()
-  local v, err = pcall(m.authorize, "/bar", admin_rbac_header, host_header);
+  local v, err = pcall(m.authorize, "/bar", admin_rbac_header, host);
   if v then
       error("No expected error")
    else
@@ -83,7 +86,7 @@ function tb:test_should_fail_rbac_if_url_not_defined()
 end
 
 function tb:test_should_fail_rbac_if_role_absent()
-  local v, err = pcall(m.authorize, "/basic-access-1", notadmin_rbac_header, host_header);
+  local v, err = pcall(m.authorize, "/basic-access-1", notadmin_rbac_header, host);
   if v then
       error("No expected error")
    else
@@ -92,7 +95,7 @@ function tb:test_should_fail_rbac_if_role_absent()
 end
 
 function tb:test_should_fail_rbac_if_wrong_host()
-  local v, err = pcall(m.authorize, "/basic-access-1", admin_rbac_header, wrong_host_header);
+  local v, err = pcall(m.authorize, "/basic-access-1", admin_rbac_header, wrong_host);
   if v then
       error("No expected error")
    else
@@ -101,7 +104,7 @@ function tb:test_should_fail_rbac_if_wrong_host()
 end
 
 function tb:test_should_fail_rbac_if_wrong_sign()
-  local v, err = pcall(m.authorize, "/basic-access-1", admin_rbac_header_wrong_sign, host_header);
+  local v, err = pcall(m.authorize, "/basic-access-1", admin_rbac_header_wrong_sign, host);
   if v then
       error("No expected error")
    else

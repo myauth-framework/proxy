@@ -53,6 +53,7 @@ local function check_basic(url, cred)
 
   for i, item in ipairs(_M.config.basic) do
     if(string.match(url, item.url) and has_value(item.users, user_id)) then
+      _M.strategy.set_user_id(user_id)
       return
     end
   end
@@ -62,13 +63,17 @@ end
 
 local function check_rbac(url, token, host)
 
-  if(_M.config == null or _M.config.rbac == nil) then
+  if(_M.config == null or _M.config.rbac == nil or _M.config.rbac.rules == nil) then
     _M.strategy.exit_forbidden("There's no bearer access")
   end
 
-  for i, item in ipairs(_M.config.rbac) do
+  mjwt.secret = _M.config.rbac.secret
+  mjwt.strategy = _M.strategy
+
+  for i, item in ipairs(_M.config.rbac.rules) do
     if(string.match(url, item.url)) then
-      mjwt.authorize_header_for_roles(token, host, item.roles)
+      mjwt.authorize_roles(token, host, item.roles)
+      return
     end
   end
 
@@ -97,7 +102,7 @@ function _M.authorize(url, auth_header, host_header)
 
 	local _, _, token = string.find(auth_header, "Bearer%s+(.+)")
 	if token ~= nil then
-  	-- check rbac
+  	check_rbac(url, token, host_header)
   	return
 	end
 
