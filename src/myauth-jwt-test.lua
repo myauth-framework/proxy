@@ -3,7 +3,7 @@ local tb = iresty_test.new({unit_name="myauth-jwt-test"})
 
 local m = require "myauth-jwt"
 
-local token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUF1dGguT0F1dGhQb2ludCIsInN1YiI6IjBjZWMwNjdmOGRhYzRkMTg5NTUxMjAyNDA2ZTQxNDdjIiwiZXhwIjo3NTY4NDcyMDI0LjAyNjUwMiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJteWF1dGg6Y2xpbWUiOiJDbGltZVZhbCJ9.y8QQl0HiNhR3-Ra8j8_xMAOnyUgl8KpPodR20ya8JvQ"
+local token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUF1dGguT0F1dGhQb2ludCIsInN1YiI6IjBjZWMwNjdmOGRhYzRkMTg5NTUxMjAyNDA2ZTQxNDdjIiwiZXhwIjo3NTY4NDcyMDI0LjAyNjUwMiwicm9sZXMiOlsicm9vdCIsIkFkbWluIl0sIm15YXV0aDpjbGltZSI6IkNsaW1lVmFsIn0.u2d7kkDW6MrZLZP48GMeyiOusrp0wNr-1AMC4LBTl6g"
 local wrong_token = "babla"
 local host = "test.host.ru"
 

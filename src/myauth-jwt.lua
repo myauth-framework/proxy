@@ -1,5 +1,5 @@
 -- myauth-jwt.lua
--- v 1.0.0
+-- v 1.1.0
 
 local _M = {}
 
@@ -76,14 +76,30 @@ function _M.authorize_roles(token, host, target_roles)
 
     local role = jwt_obj.payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
 
-    if role == nil then
-      _M.strategy.exit_forbidden("Roles not specified")
-    end
+    --print(cjson.encode(jwt_obj.payload.roles))
 
-    if has_value(target_roles, role) then
-      set_user_headers(jwt_obj.payload)
-      return true
-    end  
+    if role ~= nil then
+      
+      if has_value(target_roles, role) then
+        set_user_headers(jwt_obj.payload)
+        return true
+      end
+    
+    elseif jwt_obj.payload.roles ~= nil then
+
+      for key,value in ipairs(jwt_obj.payload.roles) 
+      do
+        if has_value(target_roles, value) then
+          set_user_headers(jwt_obj.payload)
+          return true
+        end
+      end
+
+    else
+
+      _M.strategy.exit_forbidden("Roles not specified")  
+
+    end
 
     _M.strategy.exit_forbidden("Access denied for your role")
 end
