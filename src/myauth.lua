@@ -10,6 +10,14 @@ local base64 = require "libs.base64"
 local cjson = require "libs.json"
 local mjwt = require "myauth-jwt"
 
+local function check_url(url, pattern)
+
+  local norm_pattern, _ = string.gsub(pattern, "-", "%%-")
+  norm_pattern, _ = string.gsub(norm_pattern, "%%%%%-", "%%-")
+  return string.match(url, norm_pattern)
+
+end
+
 local function has_value (tab, val)
     for index, value in ipairs(tab) do
         if value == val then
@@ -35,7 +43,7 @@ local function check_anon(url)
   end
   
   for i, url_pattern in ipairs(_M.config.anon) do
-    if(string.match(url, url_pattern)) then
+    if(check_url(url, url_pattern)) then
       return
     end
   end
@@ -71,7 +79,7 @@ local function check_rbac(url, token, host)
   mjwt.strategy = _M.strategy
 
   for i, item in ipairs(_M.config.rbac.rules) do
-    if(string.match(url, item.url)) then
+    if(check_url(url, item.url)) then
       mjwt.authorize_roles(token, host, item.roles)
       return
     end
