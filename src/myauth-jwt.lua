@@ -1,53 +1,43 @@
 -- myauth-jwt.lua
--- v 1.0.0
+-- v 1.1.0
 
 local _M = {}
 
-require "myauth-jwt-nginx"
-local cjson = require "cjson"
+local cjson = require "libs.json"
 
-_M.strategy = require "myauth-jwt-nginx"
+_M.strategy = require "myauth-nginx"
 _M.secret = nil
+_M.ignore_audience = false
 
-local function check_and_provide_token_from_header(auth_header)
-  if auth_header == nil then
-    _M.strategy:exit_unauthorized("Missing token header")
-  end
-
-  local _, _, token = string.find(auth_header, "Bearer%s+(.+)")
+local function check_and_provide_token_from_header(token, host)
   if token == nil then
-    _M.strategy:exit_unauthorized("Missing token")
+    _M.strategy.exit_unauthorized("Missing token")
   end
 
   local jwt = require "resty.jwt"
-  -- local jwt_obj = jwt:load_jwt('', token)
 
   if _M.secret == nil then
     error("Secret not specified")
   end
 
-  local jwt_obj = jwt:verify(_M.secret, token);
-
-  -- print("Token: " .. token)
-  --print(cjson.encode(jwt_obj))
+  local jwt_obj = jwt:verify(_M.secret, token)
 
   if not jwt_obj.verified then
-    _M.strategy:exit_unauthorized("Invalid token: " .. jwt_obj.reason)
+    _M.strategy.exit_unauthorized("Invalid token: " .. jwt_obj.reason)
   end
 
-  -- if not jwt:verify_jwt_obj(_M.secret, jwt_obj, "sub") then
-  --  _M.strategy:exit_unauthorized("Invalid token")
-  -- end
+  if not _M.ignore_audience then
+    if jwt_obj.payload.aud ~= null then
+      if host ~= nil then
+        if(jwt_obj.payload.aud ~= host) then
+            _M.strategy.exit_unauthorized("Invalid audience. Expected '" .. jwt_obj.payload.aud .. "' but got '" .. host .. "'")
+        end
+      else
+        _M.strategy.exit_unauthorized("Cant detect a host to check audience")
+      end
+    end
+  end 
   
-  
-
-  --local sub = jwt_obj.payload['sub']
-  --if sub == nil then
-  --  _M.strategy:exit_unauthorized("Invalid token")
-  --end
-
-
-
   return jwt_obj
 end
 
@@ -60,46 +50,58 @@ local function has_value (tab, val)
     return false
 end
 
--- Check JWT token from current 'Authorization' header without roles and climes
-function _M.authorize()
-  
-  local auth_header = ngx.var.http_Authorization
-  authorize_header(auth_header);
-  
-end
+local function set_user_headers(jwt_payload)
+  _M.strategy.set_user_id(jwt_payload.sub)
 
--- Check JWT token from specified header without roles and climes
-function _M.authorize_header(auth_header)
-  check_and_provide_token_from_header(auth_header)
-end
-
--- Check JWT token from current 'Authorization' header with specified roles
-function _M.authorize_for_roles(...)
-
-  local auth_header = ngx.var.http_Authorization
-  check_and_provide_token_from_header(auth_header, unpack(arg));
-
-end
-
--- Check JWT token from current 'Authorization' header with specified roles
-function _M.authorize_header_for_roles(auth_header, ...)
-
-    local jwt_obj = check_and_provide_token_from_header(auth_header)
-
-    local roles = jwt_obj.payload['myauth:roles']
-
-    if roles == nil then
-      _M.strategy:exit_forbidden("Roles not specified")
+  local claims = {}
+  for k,v in pairs(jwt_payload) do
+    if k ~= "iss" and 
+       k ~= "sub" and 
+       k ~= "aud" and 
+       k ~= "exp" and 
+       k ~= "nbf" and 
+       k ~= "iat" and 
+       k ~= "jti" then
+      claims[k] = v
     end
+  end
 
-    local target_roles = table.pack(...)
-    for i=1,target_roles.n do
-        if has_value(roles, target_roles[i]) then
+  _M.strategy.set_user_claims(cjson.encode(claims))
+end
+
+-- Check JWT token from current 'Authorization' header with specified roles
+function _M.authorize_roles(token, host, target_roles)
+
+    local jwt_obj = check_and_provide_token_from_header(token, host)
+
+    local role = jwt_obj.payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+
+    --print(cjson.encode(jwt_obj.payload.roles))
+
+    if role ~= nil then
+      
+      if has_value(target_roles, role) then
+        set_user_headers(jwt_obj.payload)
+        return true
+      end
+    
+    elseif jwt_obj.payload.roles ~= nil then
+
+      for key,value in ipairs(jwt_obj.payload.roles) 
+      do
+        if has_value(target_roles, value) then
+          set_user_headers(jwt_obj.payload)
           return true
-        end  
+        end
+      end
+
+    else
+
+      _M.strategy.exit_forbidden("Roles not specified")  
+
     end
 
-    _M.strategy:exit_forbidden("Access denied")
+    _M.strategy.exit_forbidden("Access denied for your role")
 end
 
 return _M
