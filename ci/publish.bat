@@ -3,16 +3,16 @@ echo off
 IF [%1]==[] goto noparam
 
 echo "Copy source ..."
-xcopy /E /I ..\src .\out\app
+xcopy /E /I /Y ..\src .\out\app
 
 echo "Build image '%1' and 'latest'..."
-docker build -t ozzyext/mylab-proxy:%1 -t ozzyext/mylab-proxy:latest .
+docker build -t ozzyext/myauth-proxy:%1 -t ozzyext/myauth-proxy:latest .
 
 echo "Publish image '%1' ..."
-docker push ozzyext/mylab-proxy:%1
+docker push ozzyext/myauth-proxy:%1
 
 echo "Publish image 'latest' ..."
-docker push ozzyext/mylab-proxy:latest
+docker push ozzyext/myauth-proxy:latest
 
 goto done
 
