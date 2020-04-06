@@ -86,5 +86,15 @@ function tb:test_should_load_rbac()
    end
 end
 
+function tb:test_should_load_white_list()
+
+  if(m.white_list == nil) then
+      error("White list not loaded")
+   end
+   if(m.white_list[1] ~= "/free_for_access") then
+      error("White list items loaded incorrectly")
+   end
+
+end
 -- units test
 tb:run()

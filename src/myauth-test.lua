@@ -18,6 +18,7 @@ function tb:init(  )
   m = require "myauth"
   m.strategy = require "test.myauth-test-nginx" 
   m.config = { 
+    white_list = { "/free-resource" },
     anon = { "/foo" },
     basic = {
       {
@@ -111,6 +112,10 @@ function tb:test_should_fail_rbac_if_wrong_sign()
    else
       print("Actual error: " .. err)
    end
+end
+
+function tb:test_should_accept_white_list()
+  m.authorize_core("/free-resource", admin_rbac_header_wrong_sign, host);
 end
 
 -- units test

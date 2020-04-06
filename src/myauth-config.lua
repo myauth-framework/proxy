@@ -13,6 +13,7 @@ function _M.load(filepath)
 	   _M.anon = configEnv.anon
 	   _M.basic = configEnv.basic
 	   _M.rbac = configEnv.rbac
+	   _M.white_list = configEnv.white_list
 	else
 	   error(err)
 	end
