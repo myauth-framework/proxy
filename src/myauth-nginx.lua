@@ -27,7 +27,11 @@ function _M.exit_forbidden(msg)
   set_source_header()
   ngx.status = ngx.HTTP_FORBIDDEN
   ngx.req.set_header("Content-Type", "text/plain") 
-  ngx.print(msg)
+  if msg ~=1 then
+    ngx.print(msg)
+  else
+    ngx.print("Access denied")
+  end
   ngx.exit(ngx.HTTP_FORBIDDEN)
 end
 

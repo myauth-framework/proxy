@@ -10,6 +10,14 @@ local base64 = require "libs.base64"
 local cjson = require "libs.json"
 local mjwt = require "myauth-jwt"
 
+local function check_url(url, pattern)
+
+  local norm_pattern, _ = string.gsub(pattern, "-", "%%-")
+  norm_pattern, _ = string.gsub(norm_pattern, "%%%%%-", "%%-")
+  return string.match(url, norm_pattern)
+
+end
+
 local function has_value (tab, val)
     for index, value in ipairs(tab) do
         if value == val then
@@ -24,23 +32,23 @@ local function get_basic_user(value)
 
   local decoded = base64.decode(value)
   local sep_index = decoded:find(":")
-  return decoded:sub(1, sep_index-1)
+  return decoded:sub(1, sep_index-1), decoded:sub(sep_index+1)
 
 end
 
 local function check_anon(url)
   
   if(_M.config == nil or _M.config.anon == nil) then
-    _M.strategy.exit_forbidden("Access denied")
+    _M.strategy.exit_forbidden()
   end
   
   for i, url_pattern in ipairs(_M.config.anon) do
-    if(string.match(url, url_pattern)) then
+    if(check_url(url, url_pattern)) then
       return
     end
   end
 
-  _M.strategy.exit_forbidden("Access denied")
+  _M.strategy.exit_forbidden()
 end
 
 local function check_basic(url, cred)
@@ -49,16 +57,29 @@ local function check_basic(url, cred)
     _M.strategy.exit_forbidden("There's no basic access")
   end
 
-  local user_id = get_basic_user(cred)
+  local user_id, user_pass = get_basic_user(cred)
 
-  for i, item in ipairs(_M.config.basic) do
-    if(string.match(url, item.url) and has_value(item.users, user_id)) then
-      _M.strategy.set_user_id(user_id)
-      return
+  for i, user in ipairs(_M.config.basic) do
+    if user.id == user_id then
+
+      if user.pass ~= user_pass then
+        _M.strategy.exit_forbidden("Wrong credentials")
+      end  
+
+      for i, url_pattern in ipairs(user.urls) do
+
+        if check_url(url, url_pattern) then
+        
+          _M.strategy.set_user_id(user_id)
+          return
+
+        end
+      end
+
     end
   end
 
-  _M.strategy.exit_forbidden("Access denied")
+  _M.strategy.exit_forbidden()
 end
 
 local function check_rbac(url, token, host)
@@ -71,13 +92,13 @@ local function check_rbac(url, token, host)
   mjwt.strategy = _M.strategy
 
   for i, item in ipairs(_M.config.rbac.rules) do
-    if(string.match(url, item.url)) then
+    if(check_url(url, item.url)) then
       mjwt.authorize_roles(token, host, item.roles)
       return
     end
   end
 
-  _M.strategy.exit_forbidden("Access denied")
+  _M.strategy.exit_forbidden()
 end
 
 function _M.authorize()
