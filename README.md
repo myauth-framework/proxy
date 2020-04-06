@@ -1,6 +1,6 @@
 # MyAuth.Proxy
 
-[![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy)](https://hub.docker.com/r/ozzyext/myauth-proxy)
+[![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver)](https://hub.docker.com/r/ozzyext/myauth-proxy)
 
 ## Обзор
 
@@ -20,7 +20,7 @@
 
 На схеме ниже отражена концепция работы сервиса.
 
-![](.\doc\my-auth-proxy.png)
+![](./doc/my-auth-proxy.png)
 
 ## Развёртывание
 
@@ -41,7 +41,7 @@ docker run --rm \
 	-p 80:80 \
 	-v ./auth-config.lua:/app/configs/auth-config.lua \
 	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
-	--add-host target-server:192.168.0.222
+	--add-host target-server:192.168.0.222 \
 	ozzyext/myauth-proxy:latest
 ```
 
