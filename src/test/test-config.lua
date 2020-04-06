@@ -4,12 +4,26 @@ anon = {
 
 basic = {
 	{
-		url = "/basic-access-[%d]+",
-		users = { "user-1", "user-2" } 
+		id = "user-1",
+		pass = "user-1-pass",
+		urls = {
+			"/basic-access-[%d]+",
+			"/basic-access-a"
+		}
 	},
 	{
-		url = "/basic-access-2",
-		users = { "user-3", "user-4" } 
+		id = "user-2",
+		pass = "user-2-pass",
+		urls = {
+			"/basic-access-[%d]+"			
+		}
+	},
+	{
+		id = "user-2",
+		pass = "user-2-pass",
+		urls = {
+			"/basic-access-2"			
+		}
 	}
 }
 

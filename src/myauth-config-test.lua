@@ -39,16 +39,19 @@ function tb:test_should_load_basic()
 
    local first = m.basic[1]
    if(first == nil) then
-      error("Basic items not found")
+      error("Basic users not found")
    end
-   if(first.url ~= "/basic%-access%-[%d]+") then
-      error("Basic item's URL not loaded")
+   if(first.id ~= "user-1") then
+      error("Basic users's id not loaded")
    end
-   if(first.users == nil or first.users[1] == nil) then
-      error("Basic item's users not loaded")
+   if(first.pass ~= "user-1-pass") then
+      error("Basic users's password not loaded")
    end
-   if(first.users[1] ~= "user-1" or first.users[2] ~= "user-2") then
-      error("Basic item's users loaded incorrectly")
+   if(first.urls == nil or first.urls[1] == nil) then
+      error("Basic user's urls not loaded")
+   end
+   if(first.urls[1] ~= "/basic-access-[%d]+" or first.urls[2] ~= "/basic-access-a") then
+      error("Basic usesr's urls loaded incorrectly")
    end
 end
 
@@ -72,7 +75,7 @@ function tb:test_should_load_rbac()
    if(first == nil) then
       error("RBAC rules not found")
    end
-   if(first.url ~= "/rbac%-access%-[%d]+") then
+   if(first.url ~= "/rbac-access-[%d]+") then
       error("RBAC rule's URL not loaded")
    end
    if(first.roles == nil or first.roles[1] == nil) then

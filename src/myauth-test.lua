@@ -21,15 +21,16 @@ function tb:init(  )
     anon = { "/foo" },
     basic = {
       {
-        url = "%/basic%-access%-[%d]+",
-        users = { "user-1" } 
+        id="user-1",
+        pass="password",
+        urls = {"/basic-access-[%d]+"}
       }
     },
     rbac = {
       secret = "qwerty",
       rules = {
         {
-          url = "%/basic%-access%-[%d]+",
+          url = "/basic-access-[%d]+",
           roles = { "Admin" } 
         }
       }

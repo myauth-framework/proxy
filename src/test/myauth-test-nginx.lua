@@ -20,7 +20,11 @@ function _M.exit_unauthorized(msg)
 end
 
 function _M.exit_forbidden(msg)
-  	error("Set FORBIDDEN: " .. msg);
+	if msg ~=nil then
+  		error("Set FORBIDDEN: " .. msg);
+  	else
+  		error("Set FORBIDDEN: Access denied");
+  	end
 end
 
 function _M.exit_internal_error(code)
