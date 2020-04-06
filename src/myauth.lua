@@ -18,6 +18,15 @@ local function check_url(url, pattern)
 
 end
 
+local function check_white_list(url)
+  for i, url_pattern in ipairs(_M.config.white_list) do
+      if check_url(url, url_pattern) then
+          return true
+      end
+  end
+  return false
+end
+
 local function has_value (tab, val)
     for index, value in ipairs(tab) do
         if value == val then
@@ -114,6 +123,10 @@ function _M.authorize_core(url, auth_header, host_header)
 
   if(_M.config == nil) then
     error("MyAuth config was not loaded")
+  end
+
+  if check_white_list(url) then
+    return
   end
 
   if auth_header == nil then

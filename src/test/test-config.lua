@@ -1,3 +1,7 @@
+white_list = {
+	"/free_for_access"
+}
+
 anon = {
 	"/pub"
 }
