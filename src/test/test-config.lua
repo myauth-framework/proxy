@@ -1,3 +1,7 @@
+black_list = {
+	"/blocked"
+}
+
 white_list = {
 	"/free_for_access"
 }

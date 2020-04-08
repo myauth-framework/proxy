@@ -96,5 +96,16 @@ function tb:test_should_load_white_list()
    end
 
 end
+
+function tb:test_should_load_black_list()
+
+  if(m.black_list == nil) then
+      error("Black list not loaded")
+   end
+   if(m.black_list[1] ~= "/blocked") then
+      error("Black list items loaded incorrectly")
+   end
+
+end
 -- units test
 tb:run()
