@@ -98,6 +98,7 @@ local function check_rbac(url, token, host)
   end
 
   mjwt.secret = _M.config.rbac.secret
+  mjwt.ignore_audience = _M.config.rbac.ignore_audience
   mjwt.strategy = _M.strategy
 
   for i, item in ipairs(_M.config.rbac.rules) do

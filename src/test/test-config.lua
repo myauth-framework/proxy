@@ -37,6 +37,7 @@ basic = {
 
 rbac = {
 	secret = "qwerty",
+	ignore_audience = true,
 	rules = {
 		{
 			url = "/rbac-access-[%d]+",

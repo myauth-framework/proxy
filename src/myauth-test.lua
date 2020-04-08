@@ -29,6 +29,7 @@ function tb:init(  )
     },
     rbac = {
       secret = "qwerty",
+      ignore_audience=false,
       rules = {
         {
           url = "/basic-access-[%d]+",

@@ -68,6 +68,10 @@ function tb:test_should_load_rbac()
       error("Wrong RBAC secret")
    end
 
+   if(m.rbac.ignore_audience ~= true) then
+      error("Wrong RBAC ignore_audience")
+   end
+
    -- print("Rbac object: " .. cjson.encode(m.rbac))
 
    local first = m.rbac.rules[1]
@@ -107,5 +111,6 @@ function tb:test_should_load_black_list()
    end
 
 end
+
 -- units test
 tb:run()
