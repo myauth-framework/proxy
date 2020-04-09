@@ -1,5 +1,4 @@
 -- myauth.lua
--- v 1.0.0
 
 local _M = {}
 
@@ -18,10 +17,23 @@ local function check_url(url, pattern)
 
 end
 
-local function check_white_list(url)
-  if config.white_list ~= nil then
+local function check_dont_apply_for(url)
+  if config.dont_apply_for ~= nil then
 
-    for i, url_pattern in ipairs(config.white_list) do
+    for i, url_pattern in ipairs(config.dont_apply_for) do
+        if check_url(url, url_pattern) then
+            return true
+        end
+    end
+
+  end
+  return false
+end
+
+local function check_only_apply_for(url)
+  if config.only_apply_for ~= nil then
+
+    for i, url_pattern in ipairs(config.only_apply_for) do
         if check_url(url, url_pattern) then
             return true
         end
@@ -226,7 +238,11 @@ function _M.initialize(init_config, init_secrets)
 
   config = init_config
   mjwt.secret = init_secrets.jwt_secret
-  mjwt.ignore_audience = init_config.rbac.ignore_audience
+
+  if init_config.rbac ~= nil then
+    mjwt.ignore_audience = init_config.rbac.ignore_audience
+  end
+
   mjwt.strategy = _M.strategy
 
   if init_config.debug_mode == true then
@@ -251,12 +267,16 @@ function _M.authorize_core(url, http_method, auth_header, host_header)
     error("MyAuth config was not loaded")
   end
 
-  if check_black_list(url) then
-    _M.strategy.exit_forbidden("Specified url was found in black list")
+  if check_dont_apply_for(url) then
+    return
   end
 
-  if check_white_list(url) then
+  if config.only_apply_for ~= nil and not check_only_apply_for(url) then
     return
+  end
+
+  if check_black_list(url) then
+    _M.strategy.exit_forbidden("Specified url was found in black list")
   end
 
   if auth_header == nil then

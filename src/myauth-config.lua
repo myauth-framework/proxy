@@ -1,5 +1,4 @@
 -- myauth-config.lua
--- v 1.0.0
 
 local _M = {}
 
@@ -13,7 +12,8 @@ function _M.load(filepath)
 	   _M.anon = configEnv.anon
 	   _M.basic = configEnv.basic
 	   _M.rbac = configEnv.rbac
-	   _M.white_list = configEnv.white_list
+	   _M.only_apply_for = configEnv.only_apply_for
+	   _M.dont_apply_for = configEnv.dont_apply_for
 	   _M.black_list = configEnv.black_list
 	   _M.debug_mode = configEnv.debug_mode
 
