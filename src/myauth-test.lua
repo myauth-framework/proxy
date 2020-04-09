@@ -17,9 +17,11 @@ local m = nil;
 function tb:init(  )
   m = require "myauth"
   m.strategy = require "test.myauth-test-nginx" 
-  m.config = { 
+
+  local config = { 
     white_list = { "/free-resource" },
     anon = { "/foo" },
+    debug_mode=true,
     basic = {
       {
         id="user-1",
@@ -28,16 +30,28 @@ function tb:init(  )
       }
     },
     rbac = {
-      secret = "qwerty",
       ignore_audience=false,
       rules = {
         {
-          url = "/basic-access-[%d]+",
-          roles = { "Admin" } 
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } ,
+          deny_post = { "Admin" }
+        },
+        {
+          url = "/bearer-access-3",
+          deny = { "Admin" } 
+        },
+        {
+          url = "/bearer-access-pub",
+          allow_for_all=true
         }
       }
     }
    }
+
+  local secrets = { jwt_secret="qwerty" }
+
+  m.initialize(config, secrets)
 end
 
 function tb:test_should_pass_anon()
@@ -45,7 +59,7 @@ function tb:test_should_pass_anon()
 end
 
 function tb:test_should_fail_anon_if_url_not_defined()
-  local v, err = pcall(m.authorize_core, "/bar")
+  local v, err = pcall(m.authorize_core, "GET", "/bar")
   if v then
       error("No expected error")
    else
@@ -54,11 +68,11 @@ function tb:test_should_fail_anon_if_url_not_defined()
 end
 
 function tb:test_should_pass_basic()
-   m.authorize_core("/basic-access-1", user1_basic_header)
+   m.authorize_core("/basic-access-1", "GET", user1_basic_header)
 end
 
 function tb:test_should_fail_basic_if_url_not_defined()
-  local v, err = pcall(m.authorize_core, "/bar", user1_basic_header)
+  local v, err = pcall(m.authorize_core, "GET", "/bar", user1_basic_header)
   if v then
       error("No expected error")
    else
@@ -67,7 +81,7 @@ function tb:test_should_fail_basic_if_url_not_defined()
 end
 
 function tb:test_should_fail_basic_if_wrong_user_defined()
-  local v, err = pcall(m.authorize_core, "/basic-access-1", user2_basic_header)
+  local v, err = pcall(m.authorize_core, "GET", "/basic-access-1", user2_basic_header)
   if v then
       error("No expected error")
    else
@@ -76,38 +90,41 @@ function tb:test_should_fail_basic_if_wrong_user_defined()
 end
 
 function tb:test_should_pass_rbac()
-   m.authorize_core("/basic-access-1", admin_rbac_header, host)
+  local v, err = pcall(m.authorize_core, "/bearer-access-1", "GET", admin_rbac_header, host);
+  if not v then
+    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_info)
+  end
 end
 
 function tb:test_should_fail_rbac_if_url_not_defined()
-  local v, err = pcall(m.authorize_core, "/bar", admin_rbac_header, host);
+  local v, err = pcall(m.authorize_core, "GET", "/bar", admin_rbac_header, host);
   if v then
-      error("No expected error")
+      error("No expected error. Debug: " .. m.strategy.debug_info)
    else
       print("Actual error: " .. err)
    end
 end
 
 function tb:test_should_fail_rbac_if_role_absent()
-  local v, err = pcall(m.authorize_core, "/basic-access-1", notadmin_rbac_header, host);
+  local v, err = pcall(m.authorize_core, "GET", "/bearer-access-1", notadmin_rbac_header, host);
   if v then
-      error("No expected error")
+      error("No expected error. Debug: " .. m.strategy.debug_info)
    else
       print("Actual error: " .. err)
    end
 end
 
 function tb:test_should_fail_rbac_if_wrong_host()
-  local v, err = pcall(m.authorize_core, "/basic-access-1", admin_rbac_header, wrong_host);
+  local v, err = pcall(m.authorize_core, "GET", "/bearer-access-1", admin_rbac_header, wrong_host);
   if v then
-      error("No expected error")
+      error("No expected error. Debug: " .. m.strategy.debug_info)
    else
       print("Actual error: " .. err)
    end
 end
 
 function tb:test_should_fail_rbac_if_wrong_sign()
-  local v, err = pcall(m.authorize_core, "/basic-access-1", admin_rbac_header_wrong_sign, host);
+  local v, err = pcall(m.authorize_core, "GET", "/bearer-access-1", admin_rbac_header_wrong_sign, host);
   if v then
       error("No expected error")
    else
@@ -116,7 +133,16 @@ function tb:test_should_fail_rbac_if_wrong_sign()
 end
 
 function tb:test_should_accept_white_list()
-  m.authorize_core("/free-resource", admin_rbac_header_wrong_sign, host);
+  m.authorize_core("/free-resource", "GET", admin_rbac_header_wrong_sign, host);
+end
+
+function tb:test_should_pass_when_allow_for_all()
+  local v, err = pcall(m.authorize_core, "/bearer-access-pub", "GET", admin_rbac_header, host);
+  if not v then
+    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_info)
+  else
+    print("Debug: " .. m.strategy.debug_info)
+  end
 end
 
 -- units test

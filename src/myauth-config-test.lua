@@ -64,10 +64,6 @@ function tb:test_should_load_rbac()
       error("RBAC rules settings not loaded")
    end
 
-   if(m.rbac.secret ~= "qwerty") then
-      error("Wrong RBAC secret")
-   end
-
    if(m.rbac.ignore_audience ~= true) then
       error("Wrong RBAC ignore_audience")
    end
@@ -82,11 +78,42 @@ function tb:test_should_load_rbac()
    if(first.url ~= "/rbac-access-[%d]+") then
       error("RBAC rule's URL not loaded")
    end
-   if(first.roles == nil or first.roles[1] == nil) then
-      error("RBAC rule's roles not loaded")
+   if(first.allow == nil or first.allow[1] == nil) then
+      error("RBAC rule's 'allow' not loaded")
    end
-   if(first.roles[1] ~= "role-1" or first.roles[2] ~= "role-2") then
-      error("RBAC rule's roles loaded incorrectly")
+   if(first.deny == nil or first.deny[1] == nil) then
+      error("RBAC rule's 'deny' not loaded")
+   end
+   if(first.allow_get == nil or first.allow_get[1] == nil) then
+      error("RBAC rule's 'allow_get' not loaded")
+   end
+   if(first.deny_post == nil or first.deny_post[1] == nil) then
+      error("RBAC rule's 'deny_post' not loaded")
+   end
+   if(first.allow[1] ~= "role-1" or first.allow[2] ~= "role-2") then
+      error("RBAC rule's 'allow' loaded incorrectly")
+   end
+   if(first.deny[1] ~= "role-3" or first.deny[2] ~= "role-4") then
+      error("RBAC rule's 'deny' loaded incorrectly")
+   end
+   if(first.allow_get[1] ~= "role-5") then
+      error("RBAC rule's 'allow_get' loaded incorrectly")
+   end
+   if(first.deny_post[1] ~= "role-1") then
+      error("RBAC rule's 'deny_post' loaded incorrectly")
+   end
+
+   local second = m.rbac.rules[2]
+
+   if(second == nil) then
+      error("RBAC rules not found")
+   end
+   if(second.url ~= "/rbac-access-2") then
+      error("RBAC rule's URL not loaded")
+   end
+
+   if(second.allow_for_all ~= true) then
+      error("RBAC rule's 'allow_for_all' not loaded")
    end
 end
 
@@ -108,6 +135,14 @@ function tb:test_should_load_black_list()
    end
    if(m.black_list[1] ~= "/blocked") then
       error("Black list items loaded incorrectly")
+   end
+
+end
+
+function tb:test_should_load_debug_mode()
+
+  if(m.debug_mode~= true) then
+      error("DebugMode flag not loaded")
    end
 
 end

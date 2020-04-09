@@ -15,6 +15,7 @@ function _M.load(filepath)
 	   _M.rbac = configEnv.rbac
 	   _M.white_list = configEnv.white_list
 	   _M.black_list = configEnv.black_list
+	   _M.debug_mode = configEnv.debug_mode
 
 	   if _M.rbac.ignore_audience == nil then
 	   	_M.rbac.ignore_audience = false

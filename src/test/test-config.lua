@@ -1,3 +1,5 @@
+debug_mode = true
+
 black_list = {
 	"/blocked"
 }
@@ -36,16 +38,18 @@ basic = {
 }
 
 rbac = {
-	secret = "qwerty",
 	ignore_audience = true,
 	rules = {
 		{
 			url = "/rbac-access-[%d]+",
-			roles = { "role-1", "role-2" } 
+			allow = { "role-1", "role-2" },
+            deny = { "role-3", "role-4" },
+            allow_get = { "role-5"  },
+            deny_post = { "role-1"  }
 		},
 		{
 			url = "/rbac-access-2",
-			roles = { "role-3", "role-4" } 
+            allow_for_all = true
 		}
 	}
 }
