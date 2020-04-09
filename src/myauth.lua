@@ -19,10 +19,27 @@ local function check_url(url, pattern)
 end
 
 local function check_white_list(url)
-  for i, url_pattern in ipairs(config.white_list) do
-      if check_url(url, url_pattern) then
-          return true
-      end
+  if config.white_list ~= nil then
+
+    for i, url_pattern in ipairs(config.white_list) do
+        if check_url(url, url_pattern) then
+            return true
+        end
+    end
+
+  end
+  return false
+end
+
+local function check_black_list(url)
+  if config.black_list ~= nil then
+
+    for i, url_pattern in ipairs(config.black_list) do
+        if check_url(url, url_pattern) then
+            return true
+        end
+    end
+
   end
   return false
 end
@@ -232,6 +249,10 @@ function _M.authorize_core(url, http_method, auth_header, host_header)
 
   if(config == nil) then
     error("MyAuth config was not loaded")
+  end
+
+  if check_black_list(url) then
+    _M.strategy.exit_forbidden("Specified url was found in black list")
   end
 
   if check_white_list(url) then

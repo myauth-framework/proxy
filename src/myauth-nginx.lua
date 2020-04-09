@@ -11,7 +11,7 @@ function _M.set_debug_authorization_header(info)
   end
 end
 
-function _M.set_source_header()
+local function set_source_header()
   ngx.header["X-Response-Source"] = "myauth-proxy"
 end
 

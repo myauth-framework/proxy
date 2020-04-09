@@ -9,10 +9,6 @@ function _M.set_debug_authorization_header(info)
   _M.debug_info = info
 end
 
-function _M.set_source_header()
-  -- print("Set X-Response-Source header: myauth-proxy")
-end
-
 function _M.set_user_id(user_id)
 	--print("Set X-User-Id header: " .. user_id)
 end
