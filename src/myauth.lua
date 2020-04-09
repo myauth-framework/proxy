@@ -3,12 +3,12 @@
 
 local _M = {}
 
-_M.config = nil;
 _M.strategy = require "myauth-nginx"
 
 local base64 = require "libs.base64"
 local cjson = require "libs.json"
 local mjwt = require "myauth-jwt"
+local config = nil
 
 local function check_url(url, pattern)
 
@@ -19,22 +19,43 @@ local function check_url(url, pattern)
 end
 
 local function check_white_list(url)
-  for i, url_pattern in ipairs(_M.config.white_list) do
-      if check_url(url, url_pattern) then
-          return true
-      end
+  if config.white_list ~= nil then
+
+    for i, url_pattern in ipairs(config.white_list) do
+        if check_url(url, url_pattern) then
+            return true
+        end
+    end
+
+  end
+  return false
+end
+
+local function check_black_list(url)
+  if config.black_list ~= nil then
+
+    for i, url_pattern in ipairs(config.black_list) do
+        if check_url(url, url_pattern) then
+            return true
+        end
+    end
+
   end
   return false
 end
 
 local function has_value (tab, val)
-    for index, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-
+  
+  if tab == nil then
     return false
+  end  
+  for index, value in ipairs(tab) do
+      if value == val then
+          return true
+      end
+  end
+
+  return false
 end
 
 local function get_basic_user(value)
@@ -47,32 +68,32 @@ end
 
 local function check_anon(url)
   
-  if(_M.config == nil or _M.config.anon == nil) then
-    _M.strategy.exit_forbidden()
+  if(config == nil or config.anon == nil) then
+    _M.strategy.exit_forbidden("There is no anon access in configuration")
   end
   
-  for i, url_pattern in ipairs(_M.config.anon) do
+  for i, url_pattern in ipairs(config.anon) do
     if(check_url(url, url_pattern)) then
       return
     end
   end
 
-  _M.strategy.exit_forbidden()
+  _M.strategy.exit_forbidden("No allowing rules were found for anon")
 end
 
 local function check_basic(url, cred)
 
-  if(_M.config == null or _M.config.basic == nil) then
-    _M.strategy.exit_forbidden("There's no basic access")
+  if(config == null or config.basic == nil) then
+    _M.strategy.exit_forbidden("There's no basic access in configuration")
   end
 
   local user_id, user_pass = get_basic_user(cred)
 
-  for i, user in ipairs(_M.config.basic) do
+  for i, user in ipairs(config.basic) do
     if user.id == user_id then
 
       if user.pass ~= user_pass then
-        _M.strategy.exit_forbidden("Wrong credentials")
+        _M.strategy.exit_forbidden("Wrong user password")
       end  
 
       for i, url_pattern in ipairs(user.urls) do
@@ -88,41 +109,150 @@ local function check_basic(url, cred)
     end
   end
 
-  _M.strategy.exit_forbidden()
+  _M.strategy.exit_forbidden("No allowing rules were found for basic")
 end
 
-local function check_rbac(url, token, host)
+local function check_rbac_token(token, host)
+  return mjwt.authorize(token, host)
+end
 
-  if(_M.config == null or _M.config.rbac == nil or _M.config.rbac.rules == nil) then
-    _M.strategy.exit_forbidden("There's no bearer access")
+local function set_rbac_headers(token_obj)
+
+  _M.strategy.set_user_id(token_obj.payload.sub)
+
+  local claims = mjwt.get_token_biz_claims(token_obj)
+  _M.strategy.set_user_claims(cjson.encode(claims))
+
+end
+
+local function check_rbac_roles(url, http_method, token_roles)
+
+  if(config == null or config.rbac == nil or config.rbac.rules == nil) then
+    _M.strategy.exit_forbidden("There's no bearer access in configuration")
   end
 
-  mjwt.secret = _M.config.rbac.secret
-  mjwt.strategy = _M.strategy
+  local calc_rules = {}
+  local rules_factors = {}
 
-  for i, item in ipairs(_M.config.rbac.rules) do
-    if(check_url(url, item.url)) then
-      mjwt.authorize_roles(token, host, item.roles)
-      return
+  for _, rule in ipairs(config.rbac.rules) do
+    if(check_url(url, rule.url)) then
+
+      local calc_rule = { 
+        pattern = rule.url,
+        total_factor = nil
+      }
+
+      local factors = {}
+
+      if rule.allow_for_all then
+        calc_rule.allow_for_all = true
+        table.insert(factors, true)
+      else
+        for _, rl in ipairs(token_roles) do
+          if has_value(rule.allow, rl) then
+            calc_rule.allow = rl
+            table.insert(factors, true)
+            break
+          end
+        end
+        for _, rl in ipairs(token_roles) do
+          if has_value(rule.deny, rl) then
+            calc_rule.deny = rl
+            table.insert(factors, false)
+            break
+          end
+        end
+        for _, rl in ipairs(token_roles) do
+          local method_allow_list_name = "allow_" .. string.lower(http_method)
+          local method_allow_list = rule[method_allow_list_name]
+          if method_allow ~= nil and has_value(method_allow_list, rl) then
+            calc_rule[method_allow_list_name] = rl
+            table.insert(factors, true)
+          end
+        end
+        for _, rl in ipairs(token_roles) do
+          local method_deny_list_name = "deny_" .. string.lower(http_method)
+          local method_deny_list = rule[method_deny_list_name]
+          if method_deny_list ~= nil and has_value(method_deny_list, rl) then
+            calc_rule[method_deny_list_name] = rl
+            table.insert(factors, false)
+          end
+        end
+      end
+
+      if has_value(factors, false) then
+        calc_rule.total_factor = false
+        table.insert(rules_factors, false)
+      elseif has_value(factors, true) then
+        calc_rule.total_factor = true
+        table.insert(rules_factors, true)
+      else
+        calc_rule.total_factor = false
+        table.insert(rules_factors, false)
+      end
+
+      table.insert(calc_rules, calc_rule)
     end
   end
 
-  _M.strategy.exit_forbidden()
+  local hasDenies = has_value(rules_factors, false);
+  local hasAllows = has_value(rules_factors, true);
+
+  return not hasDenies and hasAllows, calc_rules
+end
+
+local function check_rbac(url, http_method, token, host)
+
+  local token_obj = check_rbac_token(token, host)
+
+  --print(cjson.encode(token_obj))
+
+  local token_roles = mjwt.get_token_roles(token_obj)
+  local check_result, debug_info = check_rbac_roles(url, http_method, token_roles)
+
+  if config.debug_mode then
+    local debug_info_str = cjson.encode(debug_info)
+    _M.strategy.set_debug_authorization_header(debug_info_str)
+  end
+
+  if not check_result then
+      _M.strategy.exit_forbidden("No allowing rules were found for bearer")
+    else
+      set_rbac_headers(token_obj)
+    end 
+end
+
+function _M.initialize(init_config, init_secrets)
+
+  config = init_config
+  mjwt.secret = init_secrets.jwt_secret
+  mjwt.ignore_audience = init_config.rbac.ignore_audience
+  mjwt.strategy = _M.strategy
+
+  if init_config.debug_mode == true then
+    _M.strategy.debug_mode = true
+  end
+
 end
 
 function _M.authorize()
 
   local auth_header = ngx.var.http_Authorization
 	local host_header = ngx.var.http_Host
+  local http_method = ngx.var.request_method;
   local url = ngx.var.request_uri
   
-  _M.authorize_core(url, auth_header, host_header)
+  _M.authorize_core(url, http_method, auth_header, host_header)
 end
 
-function _M.authorize_core(url, auth_header, host_header)
+function _M.authorize_core(url, http_method, auth_header, host_header)
 
-  if(_M.config == nil) then
+  if(config == nil) then
     error("MyAuth config was not loaded")
+  end
+
+  if check_black_list(url) then
+    _M.strategy.exit_forbidden("Specified url was found in black list")
   end
 
   if check_white_list(url) then
@@ -136,7 +266,7 @@ function _M.authorize_core(url, auth_header, host_header)
 
 	local _, _, token = string.find(auth_header, "Bearer%s+(.+)")
 	if token ~= nil then
-  	check_rbac(url, token, host_header)
+  	check_rbac(url, http_method, token, host_header)
   	return
 	end
 
@@ -146,6 +276,7 @@ function _M.authorize_core(url, auth_header, host_header)
   	return
 	end
 
+  print("Auth header: " .. auth_header)
   _M.strategy.exit_forbidden("Unsupported authorization type")
 end
 

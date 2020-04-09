@@ -3,6 +3,14 @@
 
 local _M = {}
 
+_M.debug_mode = false
+
+function _M.set_debug_authorization_header(info)
+  if _M.debug_mode then
+    ngx.header["X-Authorization-Debug"] = info
+  end
+end
+
 local function set_source_header()
   ngx.header["X-Response-Source"] = "myauth-proxy"
 end
@@ -17,27 +25,28 @@ end
 
 function _M.exit_unauthorized(msg)
   set_source_header()
-  ngx.status = ngx.HTTP_UNAUTHORIZED
-  ngx.req.set_header("Content-Type", "text/plain") 
-  ngx.print(msg)
+
+  if _M.debug_mode and msg ~=nil then
+    ngx.req.set_header("Content-Type", "text/plain") 
+    ngx.print(msg)
+  end
+
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 function _M.exit_forbidden(msg)
   set_source_header()
-  ngx.status = ngx.HTTP_FORBIDDEN
-  ngx.req.set_header("Content-Type", "text/plain") 
-  if msg ~=1 then
+  
+  if _M.debug_mode and msg ~=nil then
+    ngx.req.set_header("Content-Type", "text/plain") 
     ngx.print(msg)
-  else
-    ngx.print("Access denied")
   end
+
   ngx.exit(ngx.HTTP_FORBIDDEN)
 end
 
 function _M.exit_internal_error(code)
   set_source_header()
-  ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
   ngx.req.set_header("Content-Type", "text/plain") 
   ngx.print("error_code: " .. code)
   ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR )

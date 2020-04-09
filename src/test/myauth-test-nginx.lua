@@ -3,16 +3,18 @@
 
 local _M = {}
 
-local _set_source_header = function()
-  
+_M.debug_info = "nil"
+
+function _M.set_debug_authorization_header(info)
+  _M.debug_info = info
 end
 
 function _M.set_user_id(user_id)
-	print("Set X-User-Id header: " .. user_id)
+	--print("Set X-User-Id header: " .. user_id)
 end
 
 function _M.set_user_claims(claims)
-	print("Set X-User-Claims header: " .. claims)
+	--print("Set X-User-Claims header: " .. claims)
 end
 
 function _M.exit_unauthorized(msg)
