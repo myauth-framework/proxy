@@ -30,7 +30,7 @@
 
 * настройки авторизации: файл `/app/configs/auth-config.lua` в контейнере;
 * настройки `nginx` локации по умолчанию: `/etc/nginx/snippets/default-location.conf`
-* адрес целевого сервера `target-server`, куда будут перенаправляться авторизированные запросы.
+* адрес целевого сервера `TARGET_SERVER`, куда будут перенаправляться авторизированные запросы.
 
 Пример развёртывания сервиса:
 
@@ -39,6 +39,7 @@ docker run --rm \
 	-p 80:80 \
 	-v ./auth-config.lua:/app/configs/auth-config.lua \
 	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
+	-e TARGET_SERVER=target-host.com
 	--add-host target-server:192.168.0.222 \
 	ozzyext/myauth-proxy:latest
 ```
@@ -75,11 +76,11 @@ server {
 debug_mode=true
 
 black_list = {
-    "/blocked"
+	"/blocked"
 }
 
 white_list = {
-    "/free-resource"
+	"/free-resource"
 }
 
 anon = {
@@ -112,18 +113,18 @@ basic = {
 }
 
 rbac = {
-    ignore_audience = false,
+	ignore_audience = false,
 	rules = {
 		{
 			url = "/rbac-access-[%d]+",
 			allow = { "role-1", "role-2" },
-            deny = { "role-3", "role-4" },
-            allow_get = { "role-5"  }
-            deny_post = { "role-1"  }
+			deny = { "role-3", "role-4" },
+			allow_get = { "role-5"  },
+			deny_post = { "role-1"  }
 		},
 		{
 			url = "/rbac-access-2",
-            allow_for_all = true
+ 			allow_for_all = true
 		}
 	}
 }
