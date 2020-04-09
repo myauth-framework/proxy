@@ -117,13 +117,24 @@ function tb:test_should_load_rbac()
    end
 end
 
-function tb:test_should_load_white_list()
+function tb:test_should_load_only_apply_for()
 
-  if(m.white_list == nil) then
-      error("White list not loaded")
+  if(m.only_apply_for == nil) then
+      error("'Only apply for' not loaded")
    end
-   if(m.white_list[1] ~= "/free_for_access") then
-      error("White list items loaded incorrectly")
+   if(m.only_apply_for[1] ~= "/") then
+      error("'Obly apply for' items loaded incorrectly")
+   end
+
+end
+
+function tb:test_should_load_dont_apply_for()
+
+  if(m.dont_apply_for == nil) then
+      error("'Don't apply for' not loaded")
+   end
+   if(m.dont_apply_for[1] ~= "/free_for_access") then
+      error("'Don't apply for' items loaded incorrectly")
    end
 
 end

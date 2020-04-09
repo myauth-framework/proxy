@@ -1,11 +1,15 @@
 debug_mode = true
 
-black_list = {
-	"/blocked"
+dont_apply_for = {
+	"/free_for_access"
 }
 
-white_list = {
-	"/free_for_access"
+only_apply_for = {
+	"/"
+}
+
+black_list = {
+	"/blocked"
 }
 
 anon = {

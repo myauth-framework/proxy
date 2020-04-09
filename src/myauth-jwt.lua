@@ -1,5 +1,4 @@
 -- myauth-jwt.lua
--- v 1.1.0
 
 local _M = {}
 

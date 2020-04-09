@@ -12,15 +12,55 @@ local notadmin_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3
 local host = "test.host.ru"
 local wrong_host = "test.wrong-host.ru"
 
-local m = nil;
-
-function tb:init(  )
-  m = require "myauth"
+local function create_m(config)
+  local m = require "myauth"
   m.strategy = require "test.myauth-test-nginx" 
 
-  local config = { 
-    white_list = { "/free-resource" },
-    anon = { "/foo" },
+  local secrets = { jwt_secret="qwerty" }
+
+  m.initialize(config, secrets)
+  return m
+end
+
+local function should_error(m, ...)
+  local v, err = pcall(m.authorize_core, ...)
+  if v then
+      error("No expected error")
+   else
+      print("Actual error: " .. err)
+   end
+end
+
+local function should_pass_rbac(m, ...)
+  local v, err = pcall(m.authorize_core, ...);
+  if not v then
+    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_info)
+  end
+end
+
+function tb:init(  )
+end
+
+function tb:test_should_pass_anon()
+  local config = {
+    debug_mode=true,
+    anon = { "/foo" }
+  }
+  local m = create_m(config)
+  m.authorize_core("/foo")
+end
+
+function tb:test_should_fail_anon_if_url_not_defined()
+  local config = {
+    debug_mode=true,
+    anon = { "/foo" }
+  }
+  local m = create_m(config)
+  should_error(m, "/bar")
+end
+
+function tb:test_should_pass_basic()
+  local config = {
     debug_mode=true,
     basic = {
       {
@@ -29,120 +69,197 @@ function tb:init(  )
         urls = {"/basic-access-[%d]+"}
       }
     },
+  }
+  local m = create_m(config)
+  m.authorize_core("/basic-access-1", "GET", user1_basic_header)
+end
+
+function tb:test_should_fail_basic_if_url_not_defined()
+  local config = {
+    debug_mode=true,
+    basic = {
+      {
+        id="user-1",
+        pass="password",
+        urls = {"/basic-access-[%d]+"}
+      }
+    },
+  }
+  local m = create_m(config)
+  should_error(m, "/basic-access-notdigit", "GET", user1_basic_header)
+end
+
+function tb:test_should_fail_basic_if_wrong_user_defined()
+  local config = {
+    debug_mode=true,
+    basic = {
+      {
+        id="user-1",
+        pass="password",
+        urls = {"/basic-access-[%d]+"}
+      }
+    },
+  }
+  local m = create_m(config)
+  should_error(m, "/basic-access-notdigit", "GET", user2_basic_header)
+end
+
+function tb:test_should_pass_rbac()
+  local config = {
+    debug_mode=true,
     rbac = {
-      ignore_audience=false,
       rules = {
         {
           url = "/bearer-access-[%d]+",
-          allow = { "Admin" } ,
-          deny_post = { "Admin" }
-        },
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_pass_rbac(m, "/bearer-access-1", "GET", admin_rbac_header, host)
+end
+
+function tb:test_should_fail_rbac_if_url_not_defined()
+  local config = {
+    debug_mode=true,
+    rbac = {
+      rules = {
         {
-          url = "/bearer-access-3",
-          deny = { "Admin" } 
-        },
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_error(m, "/bearer-access-notdigit", "GET", admin_rbac_header, host)
+end
+
+function tb:test_should_fail_rbac_if_role_absent()
+  local config = {
+    debug_mode=true,
+    rbac = {
+      rules = {
         {
-          url = "/bearer-access-pub",
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_error(m, "/bearer-access-1", "GET", notadmin_rbac_header, host)
+end
+
+function tb:test_should_fail_rbac_if_wrong_host()
+  local config = {
+    debug_mode=true,
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_error(m, "/bearer-access-1", "GET", admin_rbac_header, wrong_host)
+end
+
+function tb:test_should_fail_rbac_if_wrong_sign()
+
+  local config = {
+    debug_mode=true,
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_error(m, "/bearer-access-1", "GET", admin_rbac_header_wrong_sign, host)
+end
+
+function tb:test_should_fail_rbac_if_in_black_list()
+
+  local config = {
+    debug_mode=true,
+    black_list = {
+      "/"
+    },
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_error(m, "/bearer-access-1", "GET", admin_rbac_header, host)
+end
+
+function tb:test_should_dont_authorize_when_in_dont_apply_for()
+  local config = {
+    debug_mode=true,
+    dont_apply_for = {
+      "/"
+    },
+    only_apply_for = {
+      "/"
+    },
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_pass_rbac(m, "/bearer-access-nodigit", "GET", admin_rbac_header, host)
+end
+
+function tb:test_should_dont_authorize_when_not_in_only_apply_for()
+  local config = {
+    debug_mode=true,
+    only_apply_for = {
+      "/apply-for-this"
+    },
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
+          allow = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_pass_rbac(m, "/bearer-access-nodigit", "GET", admin_rbac_header, host)
+end
+
+function tb:test_should_pass_when_allow_for_all()
+  local config = {
+    debug_mode=true,
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
           allow_for_all=true
         }
       }
     }
-   }
-
-  local secrets = { jwt_secret="qwerty" }
-
-  m.initialize(config, secrets)
-end
-
-function tb:test_should_pass_anon()
-   m.authorize_core("/foo")
-end
-
-function tb:test_should_fail_anon_if_url_not_defined()
-  local v, err = pcall(m.authorize_core, "GET", "/bar")
-  if v then
-      error("No expected error")
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_pass_basic()
-   m.authorize_core("/basic-access-1", "GET", user1_basic_header)
-end
-
-function tb:test_should_fail_basic_if_url_not_defined()
-  local v, err = pcall(m.authorize_core, "GET", "/bar", user1_basic_header)
-  if v then
-      error("No expected error")
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_fail_basic_if_wrong_user_defined()
-  local v, err = pcall(m.authorize_core, "GET", "/basic-access-1", user2_basic_header)
-  if v then
-      error("No expected error")
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_pass_rbac()
-  local v, err = pcall(m.authorize_core, "/bearer-access-1", "GET", admin_rbac_header, host);
-  if not v then
-    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_info)
-  end
-end
-
-function tb:test_should_fail_rbac_if_url_not_defined()
-  local v, err = pcall(m.authorize_core, "GET", "/bar", admin_rbac_header, host);
-  if v then
-      error("No expected error. Debug: " .. m.strategy.debug_info)
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_fail_rbac_if_role_absent()
-  local v, err = pcall(m.authorize_core, "GET", "/bearer-access-1", notadmin_rbac_header, host);
-  if v then
-      error("No expected error. Debug: " .. m.strategy.debug_info)
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_fail_rbac_if_wrong_host()
-  local v, err = pcall(m.authorize_core, "GET", "/bearer-access-1", admin_rbac_header, wrong_host);
-  if v then
-      error("No expected error. Debug: " .. m.strategy.debug_info)
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_fail_rbac_if_wrong_sign()
-  local v, err = pcall(m.authorize_core, "GET", "/bearer-access-1", admin_rbac_header_wrong_sign, host);
-  if v then
-      error("No expected error")
-   else
-      print("Actual error: " .. err)
-   end
-end
-
-function tb:test_should_accept_white_list()
-  m.authorize_core("/free-resource", "GET", admin_rbac_header_wrong_sign, host);
-end
-
-function tb:test_should_pass_when_allow_for_all()
-  local v, err = pcall(m.authorize_core, "/bearer-access-pub", "GET", admin_rbac_header, host);
-  if not v then
-    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_info)
-  else
-    print("Debug: " .. m.strategy.debug_info)
-  end
+  }
+  local m = create_m(config)
+  should_pass_rbac(m, "/bearer-access-1", "GET", admin_rbac_header, host)
 end
 
 -- units test

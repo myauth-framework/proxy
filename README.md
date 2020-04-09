@@ -39,8 +39,7 @@ docker run --rm \
 	-p 80:80 \
 	-v ./auth-config.lua:/app/configs/auth-config.lua \
 	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
-	-e TARGET_SERVER=target-host.com
-	--add-host target-server:192.168.0.222 \
+	-e TARGET_SERVER=target-host.com \
 	ozzyext/myauth-proxy:latest
 ```
 
@@ -75,12 +74,16 @@ server {
 ```lua
 debug_mode=true
 
-black_list = {
-	"/blocked"
+dont_apply_for = {
+	"/free_for_access"
 }
 
-white_list = {
-	"/free-resource"
+only_apply_for = {
+	"/"
+}
+
+black_list = {
+	"/blocked"
 }
 
 anon = {
@@ -133,9 +136,10 @@ rbac = {
 * `debug_mode` - `true`/`false`, устанавливает режим отладки. При этом:
   * отрицательный ответ будет иметь содержательную часть - текст причины отказа
   * по возможности, ответ будет содержать заголовок `X-Authorization-Debug` с дополнительной отладочной информацией по процессу авторизации;
-* `black_list` -  массив шаблонов `URL`, к которым будет запрещён доступ;
-* `white_list` -  массив шаблонов `URL`, к которым будет предоставлен доступ без авторизации;
-* `anon` - массив шаблонов `URL`, к которым будет предоставлен анонимный доступ;
+* `dont_apply_for` - массив [шаблонов](https://www.lua.org/pil/20.2.html) `URL`, к которым не будет применяться авторизация;
+* `only_apply_for` - массив [шаблонов](https://www.lua.org/pil/20.2.html) `URL`, к которым будет применяться авторизация. По умолчанию - ко всем; 
+* `black_list` -  массив [шаблонов](https://www.lua.org/pil/20.2.html) `URL`, к которым будет запрещён доступ;
+* `anon` - массив [шаблонов](https://www.lua.org/pil/20.2.html)`URL`, к которым будет предоставлен анонимный доступ;
 * `basic` - массив пользователей, для которых доступна `basic`-авторизация и параметры их доступа:
   * `id` - идентификатор пользователя, используемый при формировании значения заголовка `Authentication`;
   * `pass` - пароль пользователя в открытом виде, используемый при формировании значения заголовка `Authentication`;
@@ -175,7 +179,8 @@ jwt_secret = "some-secret"
 Общий алгоритм:
 
 * если найдено совпадение в `black_list` - **отказ**;
-* если найдено совпадение в `white_list` - **разрешение**;
+* если найдено совпадение в `dont_apply_for` - **разрешение**;
+* если объявлен список `only_apply_for` и в нём нет совпадений - **отказ**;
 * если нет заголовка `Authorization`, то используются правила `anon`:
   * если найдено совпадение в `anon` - **разрешение**;
   * иначе - **отказ**;
