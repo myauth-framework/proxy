@@ -30,7 +30,7 @@
 
 * настройки авторизации: файл `/app/configs/auth-config.lua` в контейнере;
 * настройки `nginx` локации по умолчанию: `/etc/nginx/snippets/default-location.conf`
-* адрес целевого сервера `target-server`, куда будут перенаправляться авторизированные запросы.
+* адрес целевого сервера `TARGET_SERVER`, куда будут перенаправляться авторизированные запросы.
 
 Пример развёртывания сервиса:
 
@@ -39,6 +39,7 @@ docker run --rm \
 	-p 80:80 \
 	-v ./auth-config.lua:/app/configs/auth-config.lua \
 	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
+	-e TARGET_SERVER=target-host.com
 	--add-host target-server:192.168.0.222 \
 	ozzyext/myauth-proxy:latest
 ```
