@@ -16,31 +16,28 @@ function _M.set_auth_header(claims)
 end
 
 function _M.exit_unauthorized(msg)
+  ngx.status = ngx.HTTP_UNAUTHORIZED
   if _M.debug_mode and msg ~=nil then
     ngx.req.set_header("Content-Type", "text/plain") 
     ngx.print(msg)
   end
-
-  ngx.status = ngx.HTTP_UNAUTHORIZED
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 function _M.exit_forbidden(msg)  
+  ngx.status = ngx.HTTP_FORBIDDEN
   if _M.debug_mode and msg ~=nil then
     ngx.req.set_header("Content-Type", "text/plain") 
     ngx.print(msg)
   end
-
-  ngx.status = ngx.HTTP_FORBIDDEN
   ngx.exit(ngx.HTTP_FORBIDDEN)
 end
 
 function _M.exit_internal_error(code)
   
   ngx.req.set_header("Content-Type", "text/plain") 
-  ngx.print("error_code: " .. code)
-
   ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
+  ngx.print("error_code: " .. code)
   ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
 
