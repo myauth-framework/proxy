@@ -11,12 +11,8 @@ function _M.set_debug_authorization_header(info)
   end
 end
 
-function _M.set_user_id(userId)
-	ngx.req.set_header("X-User-Id", userId)
-end
-
-function _M.set_user_claims(claims)
-	ngx.req.set_header("X-User-Claims", claims)
+function _M.set_auth_header(claims)
+  ngx.req.set_header("Authorization", "MyAuth1 " .. claims)
 end
 
 function _M.exit_unauthorized(msg)

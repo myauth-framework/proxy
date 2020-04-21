@@ -17,6 +17,10 @@ function _M.set_user_claims(claims)
 	--print("Set X-User-Claims header: " .. claims)
 end
 
+function _M.set_auth_header(claims)
+  print("Set Authorization header: " .. "MyAuth1 " .. claims)
+end
+
 function _M.exit_unauthorized(msg)
   	error("Set UNAUTHORIZED: " .. msg);
 end

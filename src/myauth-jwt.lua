@@ -49,6 +49,13 @@ function _M.get_token_roles(jwt_obj)
   if role ~= nil then
     return { role }
   end
+
+  role = jwt_obj.payload['role']
+
+  if role ~= nil then
+    return { role }
+  end
+
   return jwt_obj.payload.roles;
 end
 
@@ -57,7 +64,6 @@ function _M.get_token_biz_claims(jwt_obj)
   local claims = {}
   for k,v in pairs(jwt_obj.payload) do
     if k ~= "iss" and 
-       k ~= "sub" and 
        k ~= "aud" and 
        k ~= "exp" and 
        k ~= "nbf" and 

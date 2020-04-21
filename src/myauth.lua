@@ -7,6 +7,8 @@ _M.strategy = require "myauth-nginx"
 local base64 = require "libs.base64"
 local cjson = require "libs.json"
 local mjwt = require "myauth-jwt"
+local claimstr = require "myauth-claim-str"
+
 local config = nil
 
 local function check_url(url, pattern)
@@ -112,7 +114,9 @@ local function check_basic(url, cred)
 
         if check_url(url, url_pattern) then
         
-          _M.strategy.set_user_id(user_id)
+          local claims_str = claimstr.from_user_id(user_id)
+          _M.strategy.set_auth_header(claims_str)
+
           return
 
         end
@@ -130,10 +134,10 @@ end
 
 local function set_rbac_headers(token_obj)
 
-  _M.strategy.set_user_id(token_obj.payload.sub)
-
   local claims = mjwt.get_token_biz_claims(token_obj)
-  _M.strategy.set_user_claims(cjson.encode(claims))
+  local claims_str = claimstr.from_claims(claims)
+
+  _M.strategy.set_auth_header(claims_str)
 
 end
 
