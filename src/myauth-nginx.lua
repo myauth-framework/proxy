@@ -12,7 +12,11 @@ function _M.set_debug_authorization_header(info)
 end
 
 function _M.set_auth_header(claims)
-  ngx.req.set_header("Authorization", "MyAuth1 " .. claims)
+  local authHeader ="MyAuth1 " .. claims;
+  ngx.req.set_header("Authorization", authHeader)
+  if _M.debug_mode then
+    ngx.header["X-Authorization-Header-Debug"] = authHeader 
+  end
 end
 
 function _M.exit_unauthorized(msg)
