@@ -5,17 +5,16 @@ local _M = {}
 
 _M.debug_mode = false
 
-function _M.set_debug_authorization_header(info)
+function _M.set_debug_rbac_header(info)
   if _M.debug_mode then
-    ngx.header["X-Authorization-Debug"] = info
+    ngx.header["X-Debug-Rbac"] = info
   end
 end
 
-function _M.set_auth_header(claims)
-  local authHeader ="MyAuth1 " .. claims;
-  ngx.req.set_header("Authorization", authHeader)
+function _M.set_auth_header(value)
+  ngx.req.set_header("Authorization", value)
   if _M.debug_mode then
-    ngx.header["X-Authorization-Header-Debug"] = authHeader 
+    ngx.header["X-Debug-Authorization-Header"] = value 
   end
 end
 

@@ -3,10 +3,11 @@
 
 local _M = {}
 
-_M.debug_info = "nil"
+_M.debug_rbac_info = "nil"
 
-function _M.set_debug_authorization_header(info)
-  _M.debug_info = info
+function _M.set_debug_rbac_header(info)
+  _M.debug_rbac_info = info
+  --print(info)
 end
 
 function _M.set_user_id(user_id)
