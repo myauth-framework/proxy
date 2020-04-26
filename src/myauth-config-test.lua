@@ -158,5 +158,13 @@ function tb:test_should_load_debug_mode()
 
 end
 
+function tb:test_should_load_output_scheme()
+
+  if(m.output_scheme ~= "myauth2") then
+      error("Output scheme not loaded")
+   end
+
+end
+
 -- units test
 tb:run()
