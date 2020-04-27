@@ -10,16 +10,12 @@ function _M.set_debug_rbac_header(info)
   --print(info)
 end
 
-function _M.set_user_id(user_id)
-	--print("Set X-User-Id header: " .. user_id)
+function _M.set_auth_header(value)
+  print("Set Authorization header: " .. value)
 end
 
-function _M.set_user_claims(claims)
-	--print("Set X-User-Claims header: " .. claims)
-end
-
-function _M.set_auth_header(claims)
-  print("Set Authorization header: " .. "MyAuth1 " .. claims)
+function _M.set_claim_header(name, value)
+  print("Set claim header 'X-Claim-" .. name .. "': " .. value)
 end
 
 function _M.exit_unauthorized(msg)

@@ -262,10 +262,18 @@ function _M.authorize_core(url, http_method, auth_header, host_header)
     error("MyAuth config was not loaded")
   end
 
-  if config.output_schema == "myauth1" or config.output_schema == nil then
+  if config.output_schema == "myauth2" or config.output_schema == nil then
+
+    auth_schema = require "myauth-scheme-v2"
+
+  elseif config.output_schema == "myauth1" then
+
     auth_schema = require "myauth-scheme-v1"
+
   else
+
     error("Output schema not supported")
+
   end
 
   if check_dont_apply_for(url) then

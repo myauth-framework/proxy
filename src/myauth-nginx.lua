@@ -18,6 +18,13 @@ function _M.set_auth_header(value)
   end
 end
 
+function _M.set_claim_header(name, value)
+  ngx.req.set_header("X-Claim-" .. name, value)
+  if _M.debug_mode then
+    ngx.header["X-Debug-Claim-" .. name] = value 
+  end
+end
+
 function _M.exit_unauthorized(msg)
   ngx.status = ngx.HTTP_UNAUTHORIZED
   if _M.debug_mode and msg ~=nil then
