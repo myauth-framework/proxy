@@ -34,7 +34,7 @@ end
 local function should_pass_rbac(m, ...)
   local v, err = pcall(m.authorize_core, ...);
   if not v then
-    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_info)
+    error("Error: " .. err .. ". Debug: " .. m.strategy.debug_rbac_info)
   end
 end
 

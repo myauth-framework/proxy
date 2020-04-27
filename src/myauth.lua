@@ -7,7 +7,7 @@ _M.strategy = require "myauth-nginx"
 local base64 = require "libs.base64"
 local cjson = require "libs.json"
 local mjwt = require "myauth-jwt"
-local claimstr = require "myauth-claim-str"
+local auth_schema = nil
 
 local config = nil
 
@@ -113,9 +113,8 @@ local function check_basic(url, cred)
       for i, url_pattern in ipairs(user.urls) do
 
         if check_url(url, url_pattern) then
-        
-          local claims_str = claimstr.from_user_id(user_id)
-          _M.strategy.set_auth_header(claims_str)
+
+          auth_schema.apply_basic(user_id, _M.strategy)
 
           return
 
@@ -130,15 +129,6 @@ end
 
 local function check_rbac_token(token, host)
   return mjwt.authorize(token, host)
-end
-
-local function set_rbac_headers(token_obj)
-
-  local claims = mjwt.get_token_biz_claims(token_obj)
-  local claims_str = claimstr.from_claims(claims)
-
-  _M.strategy.set_auth_header(claims_str)
-
 end
 
 local function check_rbac_roles(url, http_method, token_roles)
@@ -228,13 +218,14 @@ local function check_rbac(url, http_method, token, host)
 
   if config.debug_mode then
     local debug_info_str = cjson.encode(debug_info)
-    _M.strategy.set_debug_authorization_header(debug_info_str)
+    _M.strategy.set_debug_rbac_header(debug_info_str)
   end
 
   if not check_result then
       _M.strategy.exit_forbidden("No allowing rules were found for bearer")
     else
-      set_rbac_headers(token_obj)
+      local claims = mjwt.get_token_biz_claims(token_obj)
+      auth_schema.apply_rbac(claims, _M.strategy)
     end 
 end
 
@@ -267,8 +258,22 @@ end
 
 function _M.authorize_core(url, http_method, auth_header, host_header)
 
-  if(config == nil) then
+  if config == nil then
     error("MyAuth config was not loaded")
+  end
+
+  if config.output_schema == "myauth2" or config.output_schema == nil then
+
+    auth_schema = require "myauth-scheme-v2"
+
+  elseif config.output_schema == "myauth1" then
+
+    auth_schema = require "myauth-scheme-v1"
+
+  else
+
+    error("Output schema not supported")
+
   end
 
   if check_dont_apply_for(url) then
