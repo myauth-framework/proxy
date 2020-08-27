@@ -15,7 +15,7 @@ function _M.apply_rbac(claims, nginx)
 			header_name = "User-Id"
 		elseif name == "roles" then
 			header_name = "Roles"
-		elseif name == "role" then
+		elseif name == "role" or name == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" then
 			header_name = "Role"
 		else
 			header_name = claimstr.claim_type_to_header_name(name)
