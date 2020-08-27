@@ -302,6 +302,7 @@ X-Claim-My-Claim-4: val4
 * `sub` -> `X-Claim-User-Id`;
 * `roles` -> `X-Claim-Roles`;
 * `role` -> `X-Claim-Role`;
+* `http://schemas.microsoft.com/ws/2008/06/identity/claims/role` -> `X-Claim-Role`;
 
 ##### Утверждения-массивы
 
