@@ -15,7 +15,7 @@ local function has_value (tab, val)
 end
 
 function tb:init(  )
-    m.load("stuff\\test-config.lua")
+    m.load("stuff/test-config.lua")
 end
 
 function tb:test_should_load_anon()

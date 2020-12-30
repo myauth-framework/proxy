@@ -7,4 +7,7 @@ RUN mkdir -p /app/configs \
  && touch /app/configs/auth-secrets.lua \
  && mkdir -p /etc/nginx/snippets \
  && touch /etc/nginx/snippets/default-location.conf
-
+RUN yum -y install git
+RUN /usr/local/openresty/luajit/bin/luarocks install base64 \
+ && /usr/local/openresty/luajit/bin/luarocks install lua-resty-jwt \
+ && /usr/local/openresty/luajit/bin/luarocks install lua-resty-test

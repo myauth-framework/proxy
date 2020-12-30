@@ -5,7 +5,7 @@ local cjson = require "cjson"
 local m = require "myauth-secrets"
 
 function tb:init(  )
-    m.load("stuff\\test-secrets.lua")
+    m.load("stuff/test-secrets.lua")
 end
 
 function tb:test_should_load_jwt_secret()

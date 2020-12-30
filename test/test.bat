@@ -1,4 +1,4 @@
 @echo off
 for %%f in (*-test.lua) do (
-    resty -I .. -Ilib %%f 
+    resty -I ../src -Ilib %%f 
 )
