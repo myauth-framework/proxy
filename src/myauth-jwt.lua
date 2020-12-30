@@ -2,7 +2,7 @@
 
 local _M = {}
 
-local cjson = require "libs.json"
+local cjson = require "cjson"
 
 _M.strategy = require "myauth-nginx"
 _M.secret = nil

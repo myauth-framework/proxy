@@ -5,18 +5,20 @@ local token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNeUF1dGguT0F1dGhQ
 local wrong_token = "babla"
 local host = "test.host.ru"
 
+local debug_mode = false
+
 local function create_m()
    local m = require "myauth-jwt"
 
-   m.strategy = require "test.myauth-test-nginx"
+   m.strategy = require "stuff.myauth-test-nginx"
    m.secret = "qwerty"
-   m.strategy.debug_mode = true
+   m.strategy.debug_mode = debug_mode
 
    return m;
 end
 
 function tb:init(  )
-   self:log("init complete")
+   
 end
 
 function tb:test_should_not_authorize_wrong_token()
@@ -27,7 +29,9 @@ function tb:test_should_not_authorize_wrong_token()
    if v then
       error("No expected error")
    else
-      print("Actual error: " .. err)
+      if debug_mode then
+         print("Actual error: " .. err)
+      end
    end
 end
 
@@ -41,7 +45,9 @@ function tb:test_should_not_authorize_wrong_secret()
    if v then
       error("No expected error")
    else
-      print("Actual error: " .. err)
+      if debug_mode then
+         print("Actual error: " .. err)
+      end
    end
 end
 

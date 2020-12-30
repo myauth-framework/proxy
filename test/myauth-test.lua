@@ -1,6 +1,6 @@
 local iresty_test = require "resty.iresty_test"
 local tb = iresty_test.new({unit_name="myauth-test"})
-local cjson = require "libs.json"
+local cjson = require "cjson"
 
 local user1_basic_header = "Basic dXNlci0xOnBhc3N3b3Jk"
 local user2_basic_header = "Basic dXNlci0yOnBhc3N3b3Jk"
@@ -12,9 +12,12 @@ local notadmin_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3
 local host = "test.host.ru"
 local wrong_host = "test.wrong-host.ru"
 
+local debug_mode = false
+
 local function create_m(config)
   local m = require "myauth"
-  m.strategy = require "test.myauth-test-nginx" 
+  m.strategy = require "stuff.myauth-test-nginx" 
+  m.strategy.debug_mode = not debug_mode
 
   local secrets = { jwt_secret="qwerty" }
 
@@ -27,7 +30,9 @@ local function should_error(m, ...)
   if v then
       error("No expected error")
    else
-      print("Actual error: " .. err)
+      if debug_mode then
+        print("Actual error: " .. err)
+      end
    end
 end
 

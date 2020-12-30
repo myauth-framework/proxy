@@ -1,4 +1,4 @@
-# MyAuth.Proxy
+# MyAuth.Proxy 
 
 [![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver)](https://hub.docker.com/r/ozzyext/myauth-proxy)
 

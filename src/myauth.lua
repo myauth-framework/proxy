@@ -4,8 +4,8 @@ local _M = {}
 
 _M.strategy = require "myauth-nginx"
 
-local base64 = require "libs.base64"
-local cjson = require "libs.json"
+local base64 = require "base64"
+local cjson = require "cjson"
 local mjwt = require "myauth-jwt"
 local auth_schema = nil
 
