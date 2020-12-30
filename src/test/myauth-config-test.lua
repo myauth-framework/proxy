@@ -1,6 +1,6 @@
 local iresty_test = require "resty.iresty_test"
 local tb = iresty_test.new({unit_name="myauth-config-test"})
-local cjson = require "libs.json"
+local cjson = require "cjson"
 
 local m = require "myauth-config"
 
@@ -15,7 +15,7 @@ local function has_value (tab, val)
 end
 
 function tb:init(  )
-    m.load("test\\test-config.lua")
+    m.load("stuff\\test-config.lua")
 end
 
 function tb:test_should_load_anon()

@@ -3,19 +3,26 @@
 
 local _M = {}
 
+_M.debug_mode = true
 _M.debug_rbac_info = "nil"
 
 function _M.set_debug_rbac_header(info)
   _M.debug_rbac_info = info
-  --print(info)
+  if debug_mode then
+    print(info)
+  end
 end
 
 function _M.set_auth_header(value)
-  print("Set Authorization header: " .. value)
+  if debug_mode then
+    print("Set Authorization header: " .. value)
+  end
 end
 
 function _M.set_claim_header(name, value)
-  print("Set claim header 'X-Claim-" .. name .. "': " .. value)
+  if debug_mode then
+    print("Set claim header 'X-Claim-" .. name .. "': " .. value)
+  end
 end
 
 function _M.exit_unauthorized(msg)
