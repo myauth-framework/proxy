@@ -3,7 +3,7 @@ package = 'myauth'
 version = '1.8.6-0'
 source = {
   url = 'git://github.com/ozzy-ext-myauth/proxy',
-  tag = 'master'
+  tag = 'develop'
 }
 description = {
   summary = 'Provides authorization for nginx based on config',
@@ -23,13 +23,13 @@ dependencies = {
 build = {
   type = 'builtin',
   modules = {
-    ['myauth'] = 'lib/myauth.lua',
-    ['myauth.claim-str'] = 'lib/myauth/claim-str.lua',
-    ['myauth.config'] = 'lib/myauth/config.lua',
-    ['myauth.jwt'] = 'lib/myauth/jwt.lua',
-    ['myauth.nginx'] = 'lib/myauth/nginx.lua',
-    ['myauth.scheme-v1'] = 'lib/myauth/scheme-v1.lua',
-    ['myauth.scheme-v2'] = 'lib/myauth/scheme-v2.lua',
-    ['myauth.secrets'] = 'lib/myauth/secrets.lua',
+    ['myauth'] = 'src/myauth.lua',
+    ['myauth.claim-str'] = 'src/myauth/claim-str.lua',
+    ['myauth.config'] = 'src/myauth/config.lua',
+    ['myauth.jwt'] = 'src/myauth/jwt.lua',
+    ['myauth.nginx'] = 'src/myauth/nginx.lua',
+    ['myauth.scheme-v1'] = 'src/myauth/scheme-v1.lua',
+    ['myauth.scheme-v2'] = 'src/myauth/scheme-v2.lua',
+    ['myauth.secrets'] = 'src/myauth/secrets.lua',
   }
 }

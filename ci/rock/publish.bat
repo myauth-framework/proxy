@@ -1,8 +1,5 @@
 @echo off
 
-echo "Copy source ..."
-xcopy /E /I /Y ..\..\src .\lib
-
 IF [%1]==[] goto noparam
 
 echo "Build & publish ..."
