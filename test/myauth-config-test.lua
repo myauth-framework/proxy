@@ -2,7 +2,10 @@ local iresty_test = require "resty.iresty_test"
 local tb = iresty_test.new({unit_name="myauth-config-test"})
 local cjson = require "cjson"
 
-local m = require "myauth-config"
+local m
+local m_merge
+
+local config_module = require "myauth-config"
 
 local function has_value (tab, val)
     for index, value in ipairs(tab) do
@@ -15,7 +18,109 @@ local function has_value (tab, val)
 end
 
 function tb:init(  )
-    m.load("stuff/test-config.lua")
+    m = config_module.load("stuff/test-config.lua")
+
+    m_merge = config_module.load("stuff/test-config.lua")
+    m_merge = config_module.load("stuff/test-config-2.lua", m_merge)
+end
+
+function tb:test_should_not_merge_debug_mode()
+   if(m_merge.anon == false) then
+      error("Debug mode was overriden (false)")
+   end
+   if(m_merge.anon == nil) then
+      error("Debug mode was overriden (nil)")
+   end
+end
+
+function tb:test_should_not_merge_output_scheme()
+   if(m_merge.output_scheme == 'blabla') then
+      error("Output scheme was overriden")
+   end
+end
+
+function tb:test_should_not_merge_ignore_audience()
+   if(m_merge.rbac.ignore_audience == false) then
+      error("Rbac ignore_audience was overriden (false)")
+   end
+end
+
+function tb:test_should_merge_dont_apply_for_list()
+
+  if(not has_value(m_merge.dont_apply_for, '/free_for_access_new') or not has_value(m_merge.dont_apply_for, '/free_for_access')) then
+    error("Wrong dont_apply_for merge")
+  end
+
+end
+
+function tb:test_should_merge_only_apply_for_list()
+  
+  if(not has_value(m_merge.only_apply_for, '/new') or not has_value(m_merge.only_apply_for, '/')) then
+    error("Wrong only_apply_for merge")
+  end
+
+end
+
+function tb:test_should_merge_black_list()
+  
+  if(not has_value(m_merge.black_list, '/blocked_new') or not has_value(m_merge.black_list, '/blocked')) then
+    error("Wrong blocked_new merge")
+  end
+
+end
+
+function tb:test_should_merge_anon_list()
+  
+  if(not has_value(m_merge.anon, '/pub_new') or not has_value(m_merge.anon, '/pub')) then
+    error("Wrong anon merge")
+  end
+
+end
+
+function tb:test_should_merge_basic()
+  
+  local has_old  = false
+  local has_new  = false
+
+  for _, v in ipairs(m_merge.basic) do
+      if (v.id == 'user-1') then
+          has_old = true
+      end
+  end
+
+  for _, v in ipairs(m_merge.basic) do
+      if (v.id == 'user-3') then
+          has_new = true
+      end
+  end
+
+  if(not has_old or not has_new) then
+    error("Wrong basic merge")
+  end
+
+end
+
+function tb:test_should_merge_rbac_rules()
+  
+  local has_old  = false
+  local has_new  = false
+
+  for _, v in ipairs(m_merge.rbac.rules) do
+      if (v.url == '/rbac-access-2') then
+          has_old = true
+      end
+  end
+
+  for _, v in ipairs(m_merge.rbac.rules) do
+      if (v.url == '/rbac-access-new') then
+          has_new = true
+      end
+  end
+
+  if(not has_old or not has_new) then
+    error("Wrong rbac.rules merge")
+  end
+
 end
 
 function tb:test_should_load_anon()
@@ -152,9 +257,12 @@ end
 
 function tb:test_should_load_debug_mode()
 
-  if(m.debug_mode~= true) then
-      error("DebugMode flag not loaded")
-   end
+  if(m.debug_mode == false) then
+      error("DebugMode flag not loaded. Actiual value is 'false'")
+  end
+  if(m.debug_mode == nil) then
+      error("DebugMode flag not loaded. Actiual value  is 'nil'")
+  end
 
 end
 
@@ -163,6 +271,16 @@ function tb:test_should_load_output_scheme()
   if(m.output_scheme ~= "myauth2") then
       error("Output scheme not loaded")
    end
+
+end
+
+function tb:test_should_load_from_dir()
+
+  local dir_cfg = config_module.load_dir("." .. config_module.dirsep .. "stuff" .. config_module.dirsep .. "config-dir")
+
+  if(not has_value(dir_cfg.anon, '/pub') or not has_value(dir_cfg.anon, '/pub-2')) then
+    error("Wrong dir loading")
+  end
 
 end
 
