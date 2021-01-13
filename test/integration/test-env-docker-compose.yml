@@ -1,0 +1,21 @@
+version: "3.0"
+
+services:
+
+  myauth-proxy-test-back-server:
+    container_name: myauth-proxy-test-back-server
+    image: nginx:1.19.6
+    volumes:
+      - .\test-back-nginx.conf:/etc/nginx/conf.d/default.conf
+
+  myauth-proxy-test-server:
+    container_name: myauth-proxy-test-server
+    image: ozzyext/myauth-proxy:1.8.6
+    environment:
+      TARGET_SERVER: myauth-proxy-test-back-server
+    depends_on:
+      - myauth-proxy-test-back-server
+    volumes:
+      - .\test-config.lua:/app/configs/auth-config.lua
+    ports:
+      - 10140:80
