@@ -4,10 +4,7 @@ IF [%1]==[] goto noparam
 
 for %%I in (..) do set ParentFolderName=%%~fI
 
-rem docker run -v %ParentFolderName%\test:/app/libs/test --rm ozzyext/myauth-proxy:%1 bash -c "ls /app/libs"
 docker run -v %ParentFolderName%\test:/app/libs/test --rm ozzyext/myauth-proxy:%1 bash -c "cd /app/libs/test; bash test.sh"
-
-
 
 goto done
 

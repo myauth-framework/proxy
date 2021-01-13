@@ -2,11 +2,11 @@
 
 local _M = {}
 
-_M.strategy = require "myauth-nginx"
+_M.strategy = require "myauth.nginx"
 
 local base64 = require "base64"
 local cjson = require "cjson"
-local mjwt = require "myauth-jwt"
+local mjwt = require "myauth.jwt"
 local auth_schema = nil
 
 local config = nil
@@ -264,11 +264,11 @@ function _M.authorize_core(url, http_method, auth_header, host_header)
 
   if config.output_schema == "myauth2" or config.output_schema == nil then
 
-    auth_schema = require "myauth-scheme-v2"
+    auth_schema = require "myauth.scheme-v2"
 
   elseif config.output_schema == "myauth1" then
 
-    auth_schema = require "myauth-scheme-v1"
+    auth_schema = require "myauth.scheme-v1"
 
   else
 

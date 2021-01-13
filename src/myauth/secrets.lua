@@ -1,4 +1,4 @@
--- myauth-secrets.lua
+-- myauth.secrets
 
 local _M = {}
 

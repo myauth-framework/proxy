@@ -1,11 +1,11 @@
 local iresty_test = require "resty.iresty_test"
-local tb = iresty_test.new({unit_name="myauth-config-test"})
+local tb = iresty_test.new({unit_name="myauth.config-test"})
 local cjson = require "cjson"
 
 local m
 local m_merge
 
-local config_module = require "myauth-config"
+local config_module = require "myauth.config"
 
 local function has_value (tab, val)
     for index, value in ipairs(tab) do

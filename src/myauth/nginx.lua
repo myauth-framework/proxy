@@ -1,4 +1,4 @@
--- myauth-jwt-nginx.lua
+-- myauth.nginx
 -- nginx wrapper
 
 local _M = {}

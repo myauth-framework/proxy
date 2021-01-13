@@ -1,8 +1,8 @@
 local iresty_test = require "resty.iresty_test"
-local tb = iresty_test.new({unit_name="myauth-secrets-test"})
+local tb = iresty_test.new({unit_name="myauth.secrets-test"})
 local cjson = require "cjson"
 
-local m = require "myauth-secrets"
+local m = require "myauth.secrets"
 
 function tb:init(  )
     m.load("stuff/test-secrets.lua")

@@ -1,4 +1,4 @@
--- myauth-claim-str.lua
+-- myauth.claim-str
 
 local _M = {}
 

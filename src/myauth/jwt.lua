@@ -1,10 +1,10 @@
--- myauth-jwt.lua
+-- myauth.jwt
 
 local _M = {}
 
 local cjson = require "cjson"
 
-_M.strategy = require "myauth-nginx"
+_M.strategy = require "myauth.nginx"
 _M.secret = nil
 _M.ignore_audience = false
 

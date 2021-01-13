@@ -1,4 +1,4 @@
--- myauth-config.lua
+-- myauth.config
 
 local _M = {}
 
