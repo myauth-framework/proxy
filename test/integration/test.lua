@@ -1,6 +1,7 @@
 local iresty_test = require "resty.iresty_test"
 local tb = iresty_test.new({unit_name="myauth-integration-test"})
 local cjson = require "cjson"
+local curl = require "lcurl"
 
 local user1_basic_header = "Basic dXNlci0xOnBhc3N3b3Jk"
 local user2_basic_header = "Basic dXNlci0yOnBhc3N3b3Jk"
@@ -14,16 +15,14 @@ local wrong_host = "test.wrong-host.ru"
 
 local debug_mode = false
 
-local function create_m(config)
-  local m = require "myauth"
-  m.strategy = require "stuff.myauth-test-nginx" 
-  m.strategy.debug_mode = not debug_mode
-
-  local secrets = { jwt_secret="qwerty" }
-
-  m.initialize(config, secrets)
-  return m
-end
-
 function tb:init(  )
 end
+
+function tb:test_should_pass_anon()
+	error("TA-DA")
+end
+
+-- units test
+tb:run()
+
+print("test print")
