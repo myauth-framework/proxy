@@ -204,7 +204,7 @@ local function check_rbac_roles(url, http_method, token_roles)
   local hasDenies = has_value(rules_factors, false);
   local hasAllows = has_value(rules_factors, true);
 
-  return not hasDenies and hasAllows, calc_rules
+  return not hasDenies and hasAllows, { rules = calc_rules, roles = token_roles }
 end
 
 local function check_rbac(url, http_method, token, host)
