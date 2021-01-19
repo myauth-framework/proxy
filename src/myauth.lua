@@ -254,6 +254,8 @@ function _M.authorize()
   local url = ngx.var.request_uri
   
   _M.authorize_core(url, http_method, auth_header, host_header)
+
+  ngx.exit(ngx.OK)
 end
 
 function _M.authorize_core(url, http_method, auth_header, host_header)
