@@ -1,6 +1,18 @@
 # MyAuth.Proxy 
 
-[![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver)](https://hub.docker.com/r/ozzyext/myauth-proxy)
+
+
+`Docker` образ `nginx` (`openresty`) + `myauth`: [![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver&label=docker)](https://hub.docker.com/r/ozzyext/myauth-proxy)
+
+`LuaRocks`: [![Lua rocks](https://img.shields.io/luarocks/v/ozzy-ext/myauth)](https://luarocks.org/modules/ozzy-ext/myauth)
+
+
+
+https://img.shields.io/luarocks/v/ozzy-ext/myauth?label=bla
+
+
+
+
 
 Ознакомьтесь с последними изменениями в [журнале изменений](/changelog.md).
 
