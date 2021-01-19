@@ -1,3 +1,3 @@
 @echo off
 
-docker build -t myauth-script-based-test-server .
+docker build --no-cache -t myauth-script-based-test-server .
