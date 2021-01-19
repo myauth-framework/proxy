@@ -1,7 +1,7 @@
 local iresty_test = require "resty.iresty_test"
-local tb = iresty_test.new({unit_name="myauth-claims-test"})
+local tb = iresty_test.new({unit_name="myauth.claim-str-test"})
 
-local claim_str = require "myauth-claim-str"
+local claim_str = require "myauth.claim-str"
 
 function tb:test_should_deserialize_user_id()
 	  	
@@ -40,7 +40,7 @@ function tb:test_should_serialize_mutiple_claims_from_claims()
 	} 
 
 	local str = claim_str.v1_from_claims(claims)
-	assert(str == "aud=\"host.ru\", sub=\"user-id\"", "Actual: '".. str .. "'")
+	assert(str == "aud=\"host.ru\", sub=\"user-id\"" or str == "sub=\"user-id\", aud=\"host.ru\"", "Actual: '".. str .. "'")
 
 end
 
@@ -52,7 +52,7 @@ function tb:test_should_serialize_array()
 	} 
 
 	local str = claim_str.v1_from_claims(claims)
-	assert(str == "roles=\"admin,user\", sub=\"user-id\"", "Actual: '".. str .. "'")
+	assert(str == "roles=\"admin,user\", sub=\"user-id\"" or str == "sub=\"user-id\", roles=\"admin,user\"", "Actual: '".. str .. "'")
 
 end
 

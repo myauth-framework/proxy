@@ -1,6 +1,6 @@
--- myauth-scheme-v1.lua
+-- myauth.scheme-v1
 
-local claimstr = require "myauth-claim-str"
+local claimstr = require "myauth.claim-str"
 
 local _M = {}
 

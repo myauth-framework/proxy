@@ -12,12 +12,12 @@ local notadmin_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3
 local host = "test.host.ru"
 local wrong_host = "test.wrong-host.ru"
 
-local debug_mode = false
+local debug_mode = true
 
 local function create_m(config)
   local m = require "myauth"
   m.strategy = require "stuff.myauth-test-nginx" 
-  m.strategy.debug_mode = not debug_mode
+  m.strategy.debug_mode = debug_mode
 
   local secrets = { jwt_secret="qwerty" }
 
@@ -48,7 +48,7 @@ end
 
 function tb:test_should_pass_anon()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     anon = { "/foo" }
   }
   local m = create_m(config)
@@ -57,7 +57,7 @@ end
 
 function tb:test_should_fail_anon_if_url_not_defined()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     anon = { "/foo" }
   }
   local m = create_m(config)
@@ -66,7 +66,7 @@ end
 
 function tb:test_should_pass_basic()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     basic = {
       {
         id="user-1",
@@ -81,7 +81,7 @@ end
 
 function tb:test_should_fail_basic_if_url_not_defined()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     basic = {
       {
         id="user-1",
@@ -96,7 +96,7 @@ end
 
 function tb:test_should_fail_basic_if_wrong_user_defined()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     basic = {
       {
         id="user-1",
@@ -111,7 +111,7 @@ end
 
 function tb:test_should_pass_rbac()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     rbac = {
       rules = {
         {
@@ -125,9 +125,25 @@ function tb:test_should_pass_rbac()
   should_pass_rbac(m, "/bearer-access-1", "GET", admin_rbac_header, host)
 end
 
+function tb:test_should_pass_rbac_for_spetial_method()
+  local config = {
+    debug_mode=debug_mode,
+    rbac = {
+      rules = {
+        {
+          url = "/bearer-access-[%d]+",
+          allow_post = { "Admin" } 
+        }
+      }
+    }
+  }
+  local m = create_m(config)
+  should_pass_rbac(m, "/bearer-access-1", "POST", admin_rbac_header, host)
+end
+
 function tb:test_should_fail_rbac_if_url_not_defined()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     rbac = {
       rules = {
         {
@@ -143,7 +159,7 @@ end
 
 function tb:test_should_fail_rbac_if_role_absent()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     rbac = {
       rules = {
         {
@@ -159,7 +175,7 @@ end
 
 function tb:test_should_fail_rbac_if_wrong_host()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     rbac = {
       rules = {
         {
@@ -176,7 +192,7 @@ end
 function tb:test_should_fail_rbac_if_wrong_sign()
 
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     rbac = {
       rules = {
         {
@@ -193,7 +209,7 @@ end
 function tb:test_should_fail_rbac_if_in_black_list()
 
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     black_list = {
       "/"
     },
@@ -212,7 +228,7 @@ end
 
 function tb:test_should_dont_authorize_when_in_dont_apply_for()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     dont_apply_for = {
       "/"
     },
@@ -234,7 +250,7 @@ end
 
 function tb:test_should_dont_authorize_when_not_in_only_apply_for()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     only_apply_for = {
       "/apply-for-this"
     },
@@ -253,7 +269,7 @@ end
 
 function tb:test_should_pass_when_allow_for_all()
   local config = {
-    debug_mode=true,
+    debug_mode=debug_mode,
     rbac = {
       rules = {
         {

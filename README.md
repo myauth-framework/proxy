@@ -1,6 +1,12 @@
 # MyAuth.Proxy 
 
-[![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver)](https://hub.docker.com/r/ozzyext/myauth-proxy)
+
+
+`Docker` образ `nginx` (`openresty`) + `myauth`: [![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver&label=docker)](https://hub.docker.com/r/ozzyext/myauth-proxy)
+
+`LuaRocks`: [![Lua rocks](https://img.shields.io/luarocks/v/ozzy-ext/myauth)](https://luarocks.org/modules/ozzy-ext/myauth)
+
+
 
 Ознакомьтесь с последними изменениями в [журнале изменений](/changelog.md).
 
@@ -19,54 +25,6 @@
 На схеме ниже отражена концепция работы сервиса.
 
 ![](./doc/my-auth-proxy.png)
-
-## Развёртывание
-
-В данном разделе описывается развёртывание с использованием `docker`-контейнеров. Образы сервиса зарегистрированы в реестре образов [docker-hub](https://hub.docker.com/r/ozzyext/myauth-proxy).
-
-Для настройки работы сервиса необходимо определить следующие параметры:
-
-* настройки авторизации: файл `/app/configs/auth-config.lua` в контейнере;
-* настройки `nginx` локации по умолчанию: `/etc/nginx/snippets/default-location.conf`
-* адрес целевого сервера `TARGET_SERVER`, куда будут перенаправляться авторизированные запросы.
-
-Опционально можно настроить:
-
-* подпись сервиса в случае отрицательного ответа:
-  * помещается в заголовок `X-Source` ответа;
-  * `myauth-proxy` - по умолчанию
-  * устанавливается через переменную окружения `SERVICE_SIGN`
-
-Пример развёртывания сервиса:
-
-```bash
-docker run --rm \ 
-	-p 80:80 \
-	-v ./auth-config.lua:/app/configs/auth-config.lua \
-	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
-	-e TARGET_SERVER=target-host.com \
-	ozzyext/myauth-proxy:latest
-```
-
-## Конфигурация локации по умолчанию
-
-Файл, содержащий инструкции в формате `nginx` и загружается из пути `/etc/nginx/snippets/default-location.conf` контейнера. Встраивается в конфигурацию корневой локации сервера по умолчанию во внутреннем `nginx`:
-
- ```nginx
-server {
-	listen 80;
-	server_name default_server;
-
-	location / {
-
-		proxy_pass http://target-server;
-
-		# authorization here
-
-		include snippets/default-location.conf # <-- HERE IS !!!
-	}
-}
- ```
 
 ## Настройки авторизации
 
@@ -205,6 +163,224 @@ jwt_secret = "some-secret"
     * в противном случае (нет ни разрешений, ни запрещений) - **отказ**;
 * в противном случае (другой тип авторизационных данных в заголовке `Authorization`) - **отказ**.
 
+## Развёртывание
+
+### На базе готового docker-образа
+
+В данном разделе описывается развёртывание с использованием `docker`-контейнеров. Образы сервиса зарегистрированы в реестре образов [docker-hub](https://hub.docker.com/r/ozzyext/myauth-proxy).
+
+Для настройки работы сервиса необходимо определить следующие параметры:
+
+* настройки авторизации: файл `/app/configs/auth-config.lua` в контейнере;
+* адрес целевого сервера `TARGET_SERVER`, куда будут перенаправляться авторизированные запросы.
+
+Опционально можно настроить:
+
+* настройки `nginx` локации по умолчанию: `/etc/nginx/snippets/default-location.conf`
+* файл с секретами: `/app/configs/auth-secrets.lua`
+
+* подпись сервиса в случае отрицательного ответа (`400` `401` `403` `404` `500` `502` `504`):
+  * помещается в заголовок `X-Source` ответа;
+  * `myauth-proxy` - по умолчанию
+  * устанавливается через переменную окружения `SERVICE_SIGN`
+
+Пример развёртывания сервиса:
+
+```bash
+docker run --rm \ 
+	-p 80:80 \
+	-v ./auth-config.lua:/app/configs/auth-config.lua \
+	-v ./secrets.lua:/app/configs/auth-secrets.lua \
+	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
+	-e TARGET_SERVER=target-host.com \
+	-e SERVICE_SIGN=facade-auth-proxy \
+	ozzyext/myauth-proxy:latest
+```
+
+#### Конфигурация локации по умолчанию
+
+Файл, содержащий инструкции в формате `nginx` и загружается из пути `/etc/nginx/snippets/default-location.conf` контейнера. Встраивается в конфигурацию корневой локации сервера по умолчанию во внутреннем `nginx`:
+
+ ```nginx
+server {
+	listen 80;
+	server_name default_server;
+
+	location / {
+
+		proxy_pass http://target-server;
+
+		# authorization here
+
+		include snippets/default-location.conf # <-- HERE IS !!!
+	}
+}
+ ```
+
+### Собственный сервис авторизации 
+
+Собственный сервис авторизации с использованием библиотеки `myauth` - это `nginx` с поддержкой `LUA` в котором используется `LUA`-библиотека `myauth` для авторизации доступа к локациям.
+
+Дальнейшее изложение подразумевает развёртывание собственного сервиса авторизации на базе `docker`.
+
+#### Docker образ
+
+ Рекомендации по разработке `docker`-образа собственного сервиса авторизации:
+
+* использовать образ [openresty](https://hub.docker.com/r/openresty/openresty/) в качестве базового образа
+
+  ```dockerfile
+  FROM openresty/openresty
+  ```
+
+  или для фиксации номера версии (пример для `centos`)
+
+  ```dockerfile
+  FROM openresty/openresty:1.15.8.3-centos
+  ```
+
+* установить `git` и `gcc` для сборки библиотеки и зависимостей (пример для `centos`)
+
+  ```dockerfile
+  RUN yum -y install git gcc
+  ```
+
+* установить библиотеку `myauth`
+
+  ```dockerfile
+  RUN /usr/local/openresty/luajit/bin/luarocks install myauth
+  ```
+
+  или для фиксации номера версии
+
+  ```dockerfile
+  RUN /usr/local/openresty/luajit/bin/luarocks install myauth 1.8.6
+  ```
+
+#### Конфиг nginx
+
+Рекомендации по разработке конфигурационного файла `nginx` с использованием `myauth`:
+
+* на уровне http разместить блок инициализации
+
+  ```nginx
+  init_by_lua_block {
+  	
+  	local config = require "myauth.config".load("/app/configs/auth-config.lua")
+  	local secrets = require "myauth.secrets".load("/app/configs/auth-secrets.lua")
+  
+  	a = require "myauth"
+  	a.initialize(config, secrets)
+  }
+  
+  server {
+  	....
+  }
+  ```
+  
+* на уровне локаций, в которых необходимо проверять авторизацию, добавить код:
+
+  ```nginx
+  location / {
+  
+      access_by_lua_block {
+      	a.authorize()
+      }
+      proxy_pass http://...;		
+  }
+  ```
+
+## API
+
+### myauth.config
+
+#### load(filepath)
+
+Загружает файл конфигурации `myauth` из файла `filepath`.
+
+```lua
+local cfg = require "myauth.config"
+local mycfg = cfg.load('/path/to/cfg.lua')
+```
+
+#### load(filepath, base_config)
+
+Загружает файл конфигурации `myauth` из файла `filepath` и объединяет его с ранее загруженным конфигом `base_config`.
+
+```lua
+local cfg = require "myauth.config"
+local mycfg = cfg.load('/path/to/cfg.lua')
+mycfg = cfg.load('/path/to/cfg-2.lua', mycfg)
+```
+
+Объединение происходит по следующему принципу:
+
+* `debug_mode` - переопределяется последующим конфигом, если значение указано 
+* `output_scheme` - переопределяется последующим конфигом, если значение указано
+* `dont_apply_for` - объединение массивов
+* `only_apply_for` - объединение массивов
+* `anon` - объединение массивов
+* `black_list` - объединение массивов
+* `basic` - объединение массивов
+* `rbac.ignore_audience` - переопределяется последующим конфигом, если значение указано 
+* `rbac.rules` - объединение массивов
+
+#### load_dir(dirpath)
+
+Загружает и объединяет файлы конфигурации `myauth` из директории `direpath`
+
+```lua
+local cfg = require "myauth.config"
+local mycfg = cfg.load('/path/to/cfg.lua')
+mycfg = cfg.load('/path/to/cfg-2.lua', mycfg)
+```
+
+Объединение происходит как в случае `load(filepath, base_config)`
+
+### myauth.secrets
+
+#### load(filepath)
+
+Загружает файл с секретами`myauth` из файла `filepath`.
+
+```lua
+local secrets = require "myauth.secrets".load('/path/to/secrets.lua')
+```
+
+### myauth
+
+#### initialize(init_config, init_secrets)
+
+Инициализирует модуль авторизации.
+
+```lua
+local config = require "myauth.config".load("/app/configs/auth-config.lua")
+local secrets = require "myauth.secrets".load("/app/configs/auth-secrets.lua")
+
+a = require "myauth"
+a.initialize(config, secrets)
+```
+
+ #### authorize()
+
+Авторизирует текущий запрос `nginx`
+
+```nginx
+server {
+	
+    ...
+    
+	location / {
+    
+		access_by_lua_block {
+
+			a.authorize()
+		}
+		proxy_pass ...;		
+	}
+}
+```
+
 ## Отладка 
 
 Режим отладки позволяет получить более подробную информацию о процессе авторизации внутри прокси из текущего запроса. В режиме отладки:
@@ -220,6 +396,63 @@ debug_mode=true
 
 ### Отладочные заголовки
 
+Отладочные заголовки передаются в ответе от прокси авторизации и предназначены для отладки процесса авторизации в прокси.
+
+#### Пример с успешной авторизацией
+
+```
+"x-debug-authorization-header": "MyAuth2",
+"x-debug-rbac": "{\"roles\":[\"User3\"],\"url\":\"\\\/rbac-access-1\",\"method\":\"GET\",\"rules\":[{\"total_factor\":true,\"allow_get\":\"User3\",\"pattern\":\"\\\/rbac-access-[%d]+\"}]}",
+"x-debug-claim-user-id": "0cec067f8dac4d189551202406e4147c",
+"x-debug-claim-myauth-clime": "ClimeVal",
+"x-debug-claim-roles": "User3",
+```
+
+`x-debug-rbac`:
+
+```json
+{
+  "roles": [
+    "User3"
+  ],
+  "url": "\\/rbac-access-1",
+  "method": "GET",
+  "rules": [
+    {
+      "total_factor": true,
+      "allow_get": "User3",
+      "pattern": "\\/rbac-access-[%d]+"
+    }
+  ]
+}
+```
+
+#### Пример, когда отказано в доступе
+
+```
+"x-debug-rbac": "{\"roles\":[\"User2\"],\"url\":\"\\\/rbac-access-1\",\"method\":\"GET\",\"rules\":[{\"total_factor\":false,\"pattern\":\"\\\/rbac-access-[%d]+\",\"deny\":\"User2\"}]}",
+"x-debug-msg": "No allowing rules were found for bearer",
+```
+
+`x-debug-rbac`:
+
+```json
+{
+  "roles": [
+    "User2"
+  ],
+  "url": "\\/rbac-access-1",
+  "method": "GET",
+  "rules": [
+    {
+      "total_factor": false,
+      "pattern": "\\/rbac-access-[%d]+",
+      "deny": "User2"
+    }
+  ]
+}
+```
+
 #### X-Debug-Authorization-Header
 
 Содержит значения заголовка `Authorization` запроса, перенаправленного к запрашиваемому ресурсу.
@@ -231,12 +464,30 @@ debug_mode=true
 Пример содержания заголовка:
 
 ```json
-{"total_factor":true,"allow_for_all":true,"pattern":"/bearer-access-[%d]+"}
+{
+  "roles": [
+    "User1"
+  ],
+  "url": "\\/rbac-access-1",
+  "method": "POST",
+  "rules": [
+    {
+      "total_factor": false,
+      "allow": "User1",
+      "deny_post": "User1",
+      "pattern": "\\/rbac-access-[%d]+"
+    }
+  ]
+}
 ```
 
 #### X-Debug-Claim-...
 
 Добавляются только при исходящей аутентификации `MyAuth2`. Они содержат значения соответствующих заголовков `X-Claim-...` в перенаправленном запросе.
+
+#### X-Debug-Msg
+
+Передаёт сообщение от логики авторизации, поясняющее статус ответа.
 
 ## Особенности реализации схем аутентификации
 
