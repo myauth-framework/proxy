@@ -9,7 +9,7 @@ local user2_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 
 local host = "test.host.ru"
 
-local debug_mode = true
+local debug_mode = false
 
 function check_code(actual_code, expected_code)
 	if(actual_code ~= expected_code) then
