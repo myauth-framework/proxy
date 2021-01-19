@@ -171,7 +171,7 @@ local function check_rbac_roles(url, http_method, token_roles)
         for _, rl in ipairs(token_roles) do
           local method_allow_list_name = "allow_" .. string.lower(http_method)
           local method_allow_list = rule[method_allow_list_name]
-          if method_allow ~= nil and has_value(method_allow_list, rl) then
+          if method_allow_list ~= nil and has_value(method_allow_list, rl) then
             calc_rule[method_allow_list_name] = rl
             table.insert(factors, true)
           end
@@ -204,7 +204,7 @@ local function check_rbac_roles(url, http_method, token_roles)
   local hasDenies = has_value(rules_factors, false);
   local hasAllows = has_value(rules_factors, true);
 
-  return not hasDenies and hasAllows, { rules = calc_rules, roles = token_roles }
+  return not hasDenies and hasAllows, { rules = calc_rules, roles = token_roles, method = http_method, url = url }
 end
 
 local function check_rbac(url, http_method, token, host)
