@@ -43,6 +43,7 @@
 docker run --rm \ 
 	-p 80:80 \
 	-v ./auth-config.lua:/app/configs/auth-config.lua \
+	-v ./secrets.lua:/app/configs/auth-secrets.lua \
 	-v ./default-location.conf:/etc/nginx/snippets/default-location.conf \
 	-e TARGET_SERVER=target-host.com \
 	ozzyext/myauth-proxy:latest
@@ -231,7 +232,21 @@ debug_mode=true
 Пример содержания заголовка:
 
 ```json
-{"total_factor":true,"allow_for_all":true,"pattern":"/bearer-access-[%d]+"}
+{
+  "roles": [
+    "User1"
+  ],
+  "url": "\\/rbac-access-1",
+  "method": "POST",
+  "rules": [
+    {
+      "total_factor": false,
+      "allow": "User1",
+      "deny_post": "User1",
+      "pattern": "\\/rbac-access-[%d]+"
+    }
+  ]
+}
 ```
 
 #### X-Debug-Claim-...
