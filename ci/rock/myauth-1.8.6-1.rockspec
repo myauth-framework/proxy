@@ -1,6 +1,6 @@
 rockspec_format = '3.0'
 package = 'myauth'
-version = '1.8.6-0'
+version = '1.8.6-1'
 source = {
   url = 'git://github.com/ozzy-ext-myauth/proxy',
   tag = 'develop'

@@ -17,5 +17,6 @@ services:
       - myauth-proxy-test-back-server
     volumes:
       - .\test-config.lua:/app/configs/auth-config.lua
+      - .\test-secrets.lua:/app/configs/auth-secrets.lua
     ports:
       - 10140:80

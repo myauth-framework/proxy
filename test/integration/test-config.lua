@@ -48,13 +48,13 @@ rbac = {
 	rules = {
 		{
 			url = "/rbac-access-[%d]+",
-			allow = { "role-1", "role-2" },
-            deny = { "role-3", "role-4" },
-            allow_get = { "role-5"  },
-            deny_post = { "role-1"  }
+			allow = { "User1" },
+            deny = { "User2" },
+            allow_get = { "User3"  },
+            deny_post = { "User1"  }
 		},
 		{
-			url = "/rbac-access-2",
+			url = "/rbac-access-allow",
             allow_for_all = true
 		}
 	}
