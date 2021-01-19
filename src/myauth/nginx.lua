@@ -50,8 +50,8 @@ end
 
 function _M.exit_internal_error(code)
   
-  if _M.debug_mode and msg ~=nil then
-    ngx.header["X-Debug-Msg"] = msg 
+  if _M.debug_mode and code ~=nil then
+    ngx.header["X-Debug-Msg"] = code 
   end
   
   ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
