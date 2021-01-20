@@ -1,1 +1,0 @@
-jwt_secret = "some-secret"

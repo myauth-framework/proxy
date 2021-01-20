@@ -4,7 +4,7 @@ ARG VERSION
 
 RUN echo $VERSION
 
-ADD ./nginx-config.conf /etc/nginx/conf.d/default.conf
+ADD ./out/nginx-config.conf /etc/nginx/conf.d/default.conf
 RUN mkdir -p /app/configs \
  && touch /app/configs/auth-config.lua \
  && touch /app/configs/auth-secrets.lua \

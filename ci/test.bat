@@ -2,7 +2,7 @@
 
 IF [%1]==[] goto noparam
 
-xcopy /E /I /Y ..\..\test\unit .\out\test
+xcopy /E /I /Y ..\test\unit .\out\test
 
 docker run -v %cd%\out\test:/app/libs/test --rm ozzyext/myauth-proxy:%1 bash -c "cd /app/libs/test; bash test.sh"
 

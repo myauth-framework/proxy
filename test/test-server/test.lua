@@ -1,5 +1,5 @@
 local iresty_test = require "resty.iresty_test"
-local tb = iresty_test.new({unit_name="myauth-image-based-integration-test"})
+local tb = iresty_test.new({unit_name="myauth-proxy-integration-test"})
 local prettyjson = require "resty.prettycjson"
 
 local http = require('socket.http')	
@@ -15,7 +15,7 @@ local user3_wrongsign_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 local host = "test.host.ru"
 local wrong_host = "test.wrong-host.ru"
 
-local debug_mode = true
+local debug_mode = false
 
 function check_code(actual_code, expected_code)
 	if(actual_code ~= expected_code) then
@@ -29,7 +29,7 @@ function check_url(path, expected_code, auth_header, method)
 	local body, code, headers, status = http.request {
 
 		method = method,
-		url = "http://myauth-image-based-test-server/" .. path,
+		url = "http://myauth-proxy-test-server/" .. path,
 		headers = {
 			Authorization = auth_header
 		},
@@ -96,13 +96,19 @@ function tb:test_should_provide_metrics()
 	local resp = {}
 	local body, code, headers, status = http.request {
 
-		url = "http://myauth-image-based-test-server/metrics",
+		url = "http://myauth-proxy-test-server/metrics",
 		sink = ltn12.sink.table(resp) 
 	}
 
 	if (debug_mode) then
 		print('')
-		print('Response: ' .. status)
+		
+		if(status) then
+			print('Response: ' .. status)
+		else
+			print('Response: [nil]')
+		end
+		
 		print('')
 		print(resp)
 		print('')

@@ -4,6 +4,16 @@
 
 Формат лога изменений базируется на [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [новое]
+
+### Добавлено
+
+* `HTTP` метрики для [Prometheus](http://prometheus.io/)
+
+### Изменено
+
+* `LUA` библиотека `myauth` выделена в [отдельный репозиторий](https://github.com/ozzy-ext-myauth/myauth-lua) 
+
 ## [1.8.6] - 2021-01-20
 
 ### Добавлено
