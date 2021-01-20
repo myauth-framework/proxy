@@ -15,7 +15,7 @@ local user3_wrongsign_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 local host = "test.host.ru"
 local wrong_host = "test.wrong-host.ru"
 
-local debug_mode = false
+local debug_mode = true
 
 function check_code(actual_code, expected_code)
 	if(actual_code ~= expected_code) then
@@ -43,6 +43,7 @@ function check_url(path, expected_code, auth_header, method)
 		print(prettyjson(headers))
 		print('')
 		print(prettyjson(resp))
+		print('')
 	end
 
 	check_code(code, expected_code)
@@ -81,6 +82,41 @@ end
 
 function tb:test_should_rbac_allow_for_all()
 	check_url("rbac-access-allow", 200, user2_rbac_header, "POST")
+end
+
+function check_metric(dump, metric)
+
+	if not string.find(tostring(dump), metric) then
+		error ("'" .. metric .. "' not found")
+	end
+end
+
+function tb:test_should_provide_metrics()
+	
+	local resp = {}
+	local body, code, headers, status = http.request {
+
+		url = "http://myauth-image-based-test-server/metrics",
+		sink = ltn12.sink.table(resp) 
+	}
+
+	if (debug_mode) then
+		print('')
+		print('Response: ' .. status)
+		print('')
+		print(resp)
+		print('')
+	end
+
+	if(code ~= 200) then
+		error('Met unexpected response status code: "' ..  code)
+	end
+
+	check_metric(resp[1], "nginx_http_connections")
+	check_metric(resp[1], "nginx_http_request_duration_seconds_bucket")
+	check_metric(resp[1], "nginx_http_request_duration_seconds_bucket")
+	check_metric(resp[1], "nginx_metric_errors_total")
+	
 end
 
 -- units test
