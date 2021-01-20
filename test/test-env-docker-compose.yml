@@ -19,4 +19,6 @@ services:
     volumes:
       - .\test-server\test-config.lua:/app/configs/auth-config.lua
       - .\test-server\test-secrets.lua:/app/configs/auth-secrets.lua
-      #- .\test-server\tmp.conf:/etc/nginx/conf.d/default.conf
+      # test volumes
+      - .\tmp-src\metrics-event-listener.lua:/app/libs/metrics-event-listener.lua
+      - .\tmp-src\nginx-config.conf:/etc/nginx/conf.d/default.conf
