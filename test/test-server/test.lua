@@ -1,5 +1,4 @@
 local iresty_test = require "resty.iresty_test"
-local tb = iresty_test.new({unit_name="myauth-proxy-integration-test"})
 local prettyjson = require "resty.prettycjson"
 
 local http = require('socket.http')	
@@ -49,6 +48,10 @@ function check_url(path, expected_code, auth_header, method)
 	check_code(code, expected_code)
 end
 
+-----------------------  myauth-proxy-integration-test
+
+local tb = iresty_test.new({unit_name="myauth-proxy-integration-test"})
+
 function tb:init(  )
 end
 
@@ -84,14 +87,20 @@ function tb:test_should_rbac_allow_for_all()
 	check_url("rbac-access-allow", 200, user2_rbac_header, "POST")
 end
 
+tb:run()
+
+-----------------------  myauth-proxy-integration-metrics-test
+
+local tbm = iresty_test.new({unit_name="myauth-proxy-integration-metrics-test"})
+
 function check_metric(dump, metric)
 
-	if not string.find(tostring(dump), metric) then
+	if not string.find(dump[1], metric) then
 		error ("'" .. metric .. "' not found")
 	end
 end
 
-function tb:test_should_provide_metrics()
+function tbm:test_should_provide_metrics()
 	
 	local resp = {}
 	local body, code, headers, status = http.request {
@@ -118,12 +127,22 @@ function tb:test_should_provide_metrics()
 		error('Met unexpected response status code: "' ..  code)
 	end
 
-	check_metric(resp[1], "nginx_http_connections")
-	check_metric(resp[1], "nginx_http_request_duration_seconds_bucket")
-	check_metric(resp[1], "nginx_http_request_duration_seconds_bucket")
-	check_metric(resp[1], "nginx_metric_errors_total")
+	check_metric(resp, 'nginx_http_connections{state="reading"}')
+	check_metric(resp, 'nginx_http_connections{state="waiting"}')
+	check_metric(resp, 'nginx_http_connections{state="writing"')
+	check_metric(resp, 'nginx_http_request_duration_seconds_bucket{host="default_server"')
+	check_metric(resp, 'nginx_http_request_duration_seconds_count{host="default_server"}')
+	check_metric(resp, 'nginx_http_request_duration_seconds_sum{host="default_server"}')
+	check_metric(resp, 'nginx_http_requests_total{host="default_server",status="200"}')
+	check_metric(resp, 'nginx_http_requests_total{host="default_server",status="403"}')
+	check_metric(resp, 'nginx_metric_errors_total')
+
+	check_metric(resp, 'myauth_allow_total{url="/free_for_access",reason="dont_apply_for"}')
+	check_metric(resp, 'myauth_allow_total{url="/rbac-access-1",reason="rbac"}')
+	check_metric(resp, 'myauth_allow_total{url="/rbac-access-allow",reason="rbac"}')
+	check_metric(resp, 'myauth_deny_total{url="/blocked",reason="black_list"}')
+	check_metric(resp, 'myauth_deny_total{url="/rbac-access-1",reason="no_rbac_rules_found"}')
 	
 end
 
--- units test
-tb:run()
+tbm:run()

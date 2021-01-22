@@ -9,6 +9,7 @@
 ### Добавлено
 
 * `HTTP` метрики для [Prometheus](http://prometheus.io/)
+* метрики авторизации для [Prometheus](http://prometheus.io/)
 
 ### Изменено
 
