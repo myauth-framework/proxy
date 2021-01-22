@@ -81,10 +81,10 @@ server {
 
 ### HTTP метрики
 
-* `nginx_http_connections` (guage/датчик) - текущее количество подключений
-* `nginx_http_request_duration_seconds` (histogram/гистограмма) - время на выполнение запросов
-* `nginx_http_requests_total` (counter/счётчик) - количество обработанных запросов
-* `nginx_metric_errors_total` (counter/счётчик) - количество ошибок учёта метрик
+* `nginx_http_connections` (guage/датчик) - текущее количество подключений;
+* `nginx_http_request_duration_seconds` (histogram/гистограмма) - время на выполнение запросов. Запросы с отказом доступа не учитываются;;
+* `nginx_http_requests_total` (counter/счётчик) - количество обработанных запросов. Запросы с отказом доступа не учитываются;
+* `nginx_metric_errors_total` (counter/счётчик) - количество ошибок учёта метрик.
 
 ### Метрики авторизации
 
@@ -95,13 +95,13 @@ server {
 ```
 # HELP myauth_allow_total Number of allowed requests
 # TYPE myauth_allow_total counter
-myauth_allow_total{url="/free_for_access",reason="dont_apply_for"} 6
-myauth_allow_total{url="/rbac-access-1",reason="rbac"} 6
-myauth_allow_total{url="/rbac-access-allow",reason="rbac"} 3
+myauth_allow_total{server="default_server",url="/free_for_access",reason="dont_apply_for"} 30
+myauth_allow_total{server="default_server",url="/rbac-access-1",reason="rbac"} 30
+myauth_allow_total{server="default_server",url="/rbac-access-allow",reason="rbac"} 15
 # HELP myauth_deny_total Number of denied requests
 # TYPE myauth_deny_total counter
-myauth_deny_total{url="/blocked",reason="black_list"} 3
-myauth_deny_total{url="/rbac-access-1",reason="no_rbac_rules_found"} 6
+myauth_deny_total{server="default_server",url="/blocked",reason="black_list"} 15
+myauth_deny_total{server="default_server",url="/rbac-access-1",reason="no_rbac_rules_found"} 30
 # HELP nginx_http_connections Number of HTTP connections
 # TYPE nginx_http_connections gauge
 nginx_http_connections{state="reading"} 0
@@ -109,31 +109,31 @@ nginx_http_connections{state="waiting"} 0
 nginx_http_connections{state="writing"} 1
 # HELP nginx_http_request_duration_seconds HTTP request latency
 # TYPE nginx_http_request_duration_seconds histogram
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.005"} 14
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.010"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.020"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.030"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.050"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.075"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.100"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.200"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.300"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.400"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.500"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="00.750"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="01.000"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="01.500"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="02.000"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="03.000"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="04.000"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="05.000"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="10.000"} 15
-nginx_http_request_duration_seconds_bucket{host="default_server",le="+Inf"} 15
-nginx_http_request_duration_seconds_count{host="default_server"} 15
-nginx_http_request_duration_seconds_sum{host="default_server"} 0.019
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.005"} 74
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.010"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.020"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.030"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.050"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.075"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.100"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.200"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.300"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.400"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.500"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="00.750"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="01.000"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="01.500"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="02.000"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="03.000"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="04.000"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="05.000"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="10.000"} 75
+nginx_http_request_duration_seconds_bucket{server="default_server",le="+Inf"} 75
+nginx_http_request_duration_seconds_count{server="default_server"} 75
+nginx_http_request_duration_seconds_sum{server="default_server"} 0.038
 # HELP nginx_http_requests_total Number of HTTP requests
 # TYPE nginx_http_requests_total counter
-nginx_http_requests_total{host="default_server",status="200"} 15
+nginx_http_requests_total{server="default_server",status="200"} 75
 # HELP nginx_metric_errors_total Number of nginx-lua-prometheus errors
 # TYPE nginx_metric_errors_total counter
 nginx_metric_errors_total 0

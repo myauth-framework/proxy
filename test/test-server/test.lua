@@ -14,7 +14,7 @@ local user3_wrongsign_rbac_header = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 local host = "test.host.ru"
 local wrong_host = "test.wrong-host.ru"
 
-local debug_mode = true
+local debug_mode = false
 
 function check_code(actual_code, expected_code)
 	if(actual_code ~= expected_code) then
@@ -130,18 +130,17 @@ function tbm:test_should_provide_metrics()
 	check_metric(resp, 'nginx_http_connections{state="reading"}')
 	check_metric(resp, 'nginx_http_connections{state="waiting"}')
 	check_metric(resp, 'nginx_http_connections{state="writing"')
-	check_metric(resp, 'nginx_http_request_duration_seconds_bucket{host="default_server"')
-	check_metric(resp, 'nginx_http_request_duration_seconds_count{host="default_server"}')
-	check_metric(resp, 'nginx_http_request_duration_seconds_sum{host="default_server"}')
-	check_metric(resp, 'nginx_http_requests_total{host="default_server",status="200"}')
-	check_metric(resp, 'nginx_http_requests_total{host="default_server",status="403"}')
+	check_metric(resp, 'nginx_http_request_duration_seconds_bucket{server="default_server"')
+	check_metric(resp, 'nginx_http_request_duration_seconds_count{server="default_server"}')
+	check_metric(resp, 'nginx_http_request_duration_seconds_sum{server="default_server"}')
+	check_metric(resp, 'nginx_http_requests_total{server="default_server",status="200"}')
 	check_metric(resp, 'nginx_metric_errors_total')
 
-	check_metric(resp, 'myauth_allow_total{url="/free_for_access",reason="dont_apply_for"}')
-	check_metric(resp, 'myauth_allow_total{url="/rbac-access-1",reason="rbac"}')
-	check_metric(resp, 'myauth_allow_total{url="/rbac-access-allow",reason="rbac"}')
-	check_metric(resp, 'myauth_deny_total{url="/blocked",reason="black_list"}')
-	check_metric(resp, 'myauth_deny_total{url="/rbac-access-1",reason="no_rbac_rules_found"}')
+	check_metric(resp, 'myauth_allow_total{server="default_server",url="/free_for_access",reason="dont_apply_for"}')
+	check_metric(resp, 'myauth_allow_total{server="default_server",url="/rbac%-access%-1",reason="rbac"}')
+	check_metric(resp, 'myauth_allow_total{server="default_server",url="/rbac%-access%-allow",reason="rbac"}')
+	check_metric(resp, 'myauth_deny_total{server="default_server",url="/blocked",reason="black_list"}')
+	check_metric(resp, 'myauth_deny_total{server="default_server",url="/rbac%-access%-1",reason="no_rbac_rules_found"}')
 	
 end
 
