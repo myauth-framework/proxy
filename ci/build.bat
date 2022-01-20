@@ -6,7 +6,7 @@ echo "Copy sources ..."
 xcopy /E /I /Y ..\src .\out
 
 echo "Build image ..."
-docker build --no-cache --build-arg MYAUTH_LUA_VERSION=1.2.2 -t ozzyext/myauth-proxy:%1 -t ozzyext/myauth-proxy:latest .
+docker build --no-cache --build-arg MYAUTH_LUA_VERSION=1.2.6 -t ozzyext/myauth-proxy:%1 -t ozzyext/myauth-proxy:latest .
 
 goto done
 
