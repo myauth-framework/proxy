@@ -4,7 +4,7 @@
 
 [![Docker image](https://img.shields.io/docker/v/ozzyext/myauth-proxy?sort=semver&label=docker)](https://hub.docker.com/r/ozzyext/myauth-proxy)
 
-Ознакомьтесь с последними изменениями в [журнале изменений](/changelog.md).
+Ознакомьтесь с последними изменениями в [журнале изменений](/CHANGELOG.md).
 
 ## Обзор
 
